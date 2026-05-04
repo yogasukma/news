@@ -3,7 +3,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#ffffff">
+    <meta name="theme-color" content="#1c1917">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icons/icon-192.png">
 
     <title>{{ $title ?? 'RSS Reader' }}</title>
 
@@ -11,10 +13,17 @@
 </head>
 <body class="bg-stone-50 text-stone-900 antialiased min-h-screen">
     <header class="border-b border-stone-200 bg-white sticky top-0 z-30">
-        <div class="max-w-2xl mx-auto px-4 py-4">
-            <a href="/" class="text-xl font-semibold tracking-tight text-stone-900 hover:text-stone-600 transition-colors">
+        <div class="max-w-2xl mx-auto px-4 py-4 flex items-center justify-between gap-4">
+            <a href="/" class="text-xl font-semibold tracking-tight text-stone-900 hover:text-stone-600 transition-colors shrink-0">
                 RSS Reader
             </a>
+            <form action="{{ route('search') }}" method="GET" class="flex-1 max-w-xs">
+                <input type="search"
+                       name="q"
+                       value="{{ request('q') }}"
+                       placeholder="Search articles..."
+                       class="w-full text-sm border border-stone-200 rounded-lg px-3 py-1.5 text-stone-600 bg-stone-50 hover:border-stone-300 focus:border-stone-400 focus:bg-white focus:outline-none transition-colors placeholder:text-stone-400">
+            </form>
         </div>
     </header>
 
@@ -52,5 +61,15 @@
             </div>
         </div>
     </div>
+
+    @if (app()->environment('production'))
+    <script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js');
+        });
+    }
+    </script>
+    @endif
 </body>
 </html>
