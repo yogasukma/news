@@ -2,11 +2,11 @@
 
 ## Summary
 - Total stories: 25
-- Delivered: 21 (Sprint 001: 12, Sprint 002: 9)
-- Remaining: 4
+- Delivered: 25 (Sprint 001: 12, Sprint 002: 9, Sprint 003: 4)
+- Remaining: 0
 - Total story points: 99
-- Delivered points: 70
-- Remaining points: 29
+- Delivered points: 99
+- Remaining points: 0
 
 ---
 
@@ -255,21 +255,23 @@
 
 ## Module: PWA Support
 
-### US-022: Web app manifest and icons
+### US-022: [DELIVERED] Web app manifest and icons
 - **As a** public visitor, **I want** to install the app on my device, **so that** I can access it like a native app.
 - **Priority**: P1
 - **Points**: 2
 - **Dependencies**: US-015
+- **Status**: Delivered in Sprint 003
 - **Acceptance Criteria**:
   - [ ] Given the app is loaded, Then a valid web app manifest is served with name, icons, theme color, and display mode
   - [ ] Given the manifest, Then app icons for required sizes (192x192, 512x512) are available
   - [ ] Given a mobile browser, Then the browser shows an "install" prompt for the PWA
 
-### US-023: Service worker for offline caching
+### US-023: [DELIVERED] Service worker for offline caching
 - **As a** public visitor, **I want** the app to cache its shell for offline access, **so that** it loads quickly on return visits.
 - **Priority**: P2
 - **Points**: 3
 - **Dependencies**: US-022
+- **Status**: Delivered in Sprint 003
 - **Acceptance Criteria**:
   - [ ] Given the app is loaded, Then a service worker is registered and caches the app shell (HTML, CSS, JS)
   - [ ] Given the app is cached, When I revisit offline, Then the app shell loads from cache
@@ -279,21 +281,23 @@
 
 ## Module: Search
 
-### US-024: Full-text search
+### US-024: [DELIVERED] Full-text search
 - **As a** public visitor, **I want** to search across all articles by keyword, **so that** I can find specific content.
 - **Priority**: P3
 - **Points**: 5
 - **Dependencies**: US-015
+- **Status**: Delivered in Sprint 003
 - **Acceptance Criteria**:
   - [ ] Given a search query, When I submit the search, Then articles matching the query in title or content are shown
   - [ ] Given search results, Then each result shows title, feed name, published date, and a highlighted excerpt
   - [ ] Given no matching articles, When searched, Then a "no results found" message is shown
 
-### US-025: Search with date and folder filters
+### US-025: [DELIVERED] Search with date and folder filters
 - **As a** public visitor, **I want** to combine search with date and folder filters, **so that** I can narrow down results.
 - **Priority**: P3
 - **Points**: 3
 - **Dependencies**: US-024, US-016, US-017
+- **Status**: Delivered in Sprint 003
 - **Acceptance Criteria**:
   - [ ] Given a search within a date range, When results are shown, Then only articles within that range appear
   - [ ] Given a search within a folder, When results are shown, Then only articles from that folder appear
