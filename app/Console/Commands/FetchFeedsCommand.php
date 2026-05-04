@@ -95,19 +95,36 @@ class FetchFeedsCommand extends Command
 
     private function storeArticle(Feed $feed, array $data): Article
     {
-        return Article::updateOrCreate(
-            [
-                'feed_id' => $feed->id,
-                'external_id' => $data['external_id'] ?? $data['url'],
-            ],
-            [
+        $identifier = $data['external_id'] ?? $data['url'] ?? null;
+
+        $matchFields = $identifier !== null
+            ? ['feed_id' => $feed->id, 'external_id' => $identifier]
+            : ['feed_id' => $feed->id, 'url' => $data['url']];
+
+        $article = Article::where($matchFields)->first();
+
+        if ($article !== null) {
+            // Update mutable fields only — preserve published_at
+            $article->update([
                 'title' => $data['title'],
                 'url' => $data['url'],
                 'content' => $data['content'],
                 'author' => $data['author'],
-                'published_at' => $data['published_at'],
                 'cover_image' => $data['cover_image'],
-            ]
-        );
+            ]);
+
+            return $article;
+        }
+
+        return Article::create([
+            'feed_id' => $feed->id,
+            'title' => $data['title'],
+            'url' => $data['url'],
+            'content' => $data['content'],
+            'author' => $data['author'],
+            'published_at' => $data['published_at'],
+            'cover_image' => $data['cover_image'],
+            'external_id' => $data['external_id'],
+        ]);
     }
 }

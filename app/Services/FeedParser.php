@@ -9,6 +9,20 @@ use Illuminate\Support\Str;
 class FeedParser
 {
     /**
+     * HTML tags that are allowed in article content.
+     */
+    private const ALLOWED_TAGS = '<p><br><h1><h2><h3><h4><h5><h6><a><img><ul><ol><li><blockquote><pre><code><strong><em><b><i><s><del><ins><hr><table><thead><tbody><tr><th><td><figure><figcaption><dl><dt><dd><span><div><sup><sub><mark><abbr><time>';
+
+    /**
+     * HTML attributes that are allowed (stripped via regex after tag filtering).
+     */
+    private const DANGEROUS_ATTRIBUTE_PATTERNS = [
+        '/\bon\w+\s*=\s*["\'][^"\']*["\']/i',
+        '/\bhref\s*=\s*["\']javascript:[^"\']*["\']/i',
+        '/\bsrc\s*=\s*["\']javascript:[^"\']*["\']/i',
+    ];
+
+    /**
      * Fetch and parse a feed URL, returning normalized feed metadata and articles.
      *
      * @return array{feed: array{title: string, site_url: ?string, description: ?string}, articles: array<int, array{title: string, url: string, content: ?string, author: ?string, published_at: string, cover_image: ?string, external_id: ?string}>}
@@ -42,7 +56,7 @@ class FeedParser
         $previousState = libxml_use_internal_errors(true);
 
         try {
-            $xml = simplexml_load_string($xmlString, \SimpleXMLElement::class, LIBXML_NOCDATA);
+            $xml = simplexml_load_string($xmlString, \SimpleXMLElement::class, LIBXML_NOCDATA | LIBXML_NONET);
 
             return $xml === false ? null : $xml;
         } finally {
@@ -115,7 +129,7 @@ class FeedParser
         return [
             'title' => (string) $item->title,
             'url' => (string) $item->link,
-            'content' => $content,
+            'content' => $this->sanitizeHtml($content),
             'author' => (string) ($item->author ?? $item->children('dc', true)->creator ?? null),
             'published_at' => $publishedAt,
             'cover_image' => $coverImage,
@@ -228,7 +242,7 @@ class FeedParser
         return [
             'title' => (string) $entry->title,
             'url' => $link,
-            'content' => $content,
+            'content' => $this->sanitizeHtml($content),
             'author' => $author !== '' ? $author : null,
             'published_at' => $publishedAt,
             'cover_image' => $coverImage,
@@ -288,5 +302,27 @@ class FeedParser
         } catch (\Exception) {
             return now()->toIso8601String();
         }
+    }
+
+    /**
+     * Sanitize HTML content from untrusted feed sources.
+     *
+     * Strips dangerous tags and event handler attributes to prevent XSS.
+     */
+    protected function sanitizeHtml(?string $html): ?string
+    {
+        if ($html === null || $html === '') {
+            return $html;
+        }
+
+        // Remove dangerous tags entirely (script, iframe, object, embed, form, etc.)
+        $html = strip_tags($html, self::ALLOWED_TAGS);
+
+        // Remove event handler attributes (onclick, onload, onerror, etc.)
+        foreach (self::DANGEROUS_ATTRIBUTE_PATTERNS as $pattern) {
+            $html = (string) preg_replace($pattern, '', $html);
+        }
+
+        return $html;
     }
 }
