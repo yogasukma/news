@@ -68,7 +68,7 @@ class OpmlExportCommand extends Command
 
         file_put_contents($filePath, $xml);
 
-        $totalFeeds = Feed::count();
+        $totalFeeds = $uncategorizedFeeds->count() + $folders->sum(fn (Folder $folder) => $folder->feeds->count());
 
         $this->info("Exported {$totalFeeds} feed(s) in {$folderCount} folder(s) to {$filePath}");
 
