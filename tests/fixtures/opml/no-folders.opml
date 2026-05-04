@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="1.0">
+    <head>
+        <title>Flat Feeds</title>
+    </head>
+    <body>
+        <outline type="rss" text="Feed A" title="Feed A" xmlUrl="https://example.com/a/feed.xml" htmlUrl="https://example.com/a/"/>
+        <outline type="rss" text="Feed B" title="Feed B" xmlUrl="https://example.com/b/feed.xml" htmlUrl="https://example.com/b/"/>
+        <outline type="rss" text="Feed C" title="Feed C" xmlUrl="https://example.com/c/feed.xml" htmlUrl="https://example.com/c/"/>
+    </body>
+</opml>

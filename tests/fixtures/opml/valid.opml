@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="1.0">
+    <head>
+        <title>Test Subscriptions</title>
+    </head>
+    <body>
+        <outline text="Dev" title="Dev">
+            <outline type="rss" text="Laravel News" title="Laravel News" xmlUrl="https://laravel-news.com/feed" htmlUrl="https://laravel-news.com"/>
+            <outline type="rss" text="The Go Blog" title="The Go Blog" xmlUrl="http://blog.golang.org/feeds/posts/default" htmlUrl="http://blog.golang.org/"/>
+            <outline type="rss" text="Svelte blog" title="Svelte blog" xmlUrl="https://svelte.dev/blog/rss.xml" htmlUrl="https://svelte.dev/blog"/>
+        </outline>
+        <outline text="Blog" title="Blog">
+            <outline type="rss" text="Josh Comeau's blog" title="Josh Comeau's blog" xmlUrl="https://www.joshwcomeau.com/rss.xml" htmlUrl="https://www.joshwcomeau.com/"/>
+            <outline type="rss" text="Austin Kleon" title="Austin Kleon" xmlUrl="http://feeds2.feedburner.com/AustinKleon" htmlUrl="https://austinkleon.com"/>
+        </outline>
+        <outline type="rss" text="Hacker News" title="Hacker News" xmlUrl="https://hnrss.org/frontpage" htmlUrl="https://news.ycombinator.com"/>
+        <outline type="rss" text="Lobsters" title="Lobsters" xmlUrl="https://lobste.rs/rss" htmlUrl="https://lobste.rs"/>
+    </body>
+</opml>

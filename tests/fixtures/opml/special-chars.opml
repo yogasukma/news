@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="1.0">
+    <head>
+        <title>Special Characters &amp; Emoji ✨</title>
+    </head>
+    <body>
+        <outline text="Tech &amp; Dev" title="Tech &amp; Dev">
+            <outline type="rss" text="✍ Evan Travers" title="✍ Evan Travers" xmlUrl="http://evantravers.com/feed.xml" htmlUrl="https://evantravers.com/"/>
+            <outline type="rss" text="A very long feed title that exceeds normal length limits and should be handled gracefully by the parser without truncation or errors" title="A very long feed title that exceeds normal length limits and should be handled gracefully by the parser without truncation or errors" xmlUrl="https://example.com/long-title/feed" htmlUrl="https://example.com/long-title/"/>
+        </outline>
+        <outline type="rss" text="💐 Flower Blog" title="💐 Flower Blog" xmlUrl="https://flowers.example.com/feed" htmlUrl="https://flowers.example.com"/>
+    </body>
+</opml>
