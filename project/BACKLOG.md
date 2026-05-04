@@ -2,11 +2,11 @@
 
 ## Summary
 - Total stories: 25
-- Delivered: 12 (Sprint 001)
-- Remaining: 13
+- Delivered: 21 (Sprint 001: 12, Sprint 002: 9)
+- Remaining: 4
 - Total story points: 99
-- Delivered points: 47
-- Remaining points: 52
+- Delivered points: 70
+- Remaining points: 29
 
 ---
 
@@ -25,30 +25,33 @@
   - [ ] Given a feed URL already subscribed, When I run the command, Then a "already subscribed" message is shown
   - [ ] Given the feed has a favicon, When the feed is added, Then the favicon URL is stored
 
-### US-002: Unsubscribe from a feed
+### US-002: [DELIVERED] Unsubscribe from a feed
 - **As a** site owner, **I want** to remove a feed via `rss:feed:remove {feed}`, **so that** I can stop tracking unwanted sources.
 - **Priority**: P1
 - **Points**: 2
 - **Dependencies**: US-001
+- **Status**: Delivered in Sprint 002
 - **Acceptance Criteria**:
   - [ ] Given an existing feed ID, When I run `rss:feed:remove 1`, Then the feed and all its articles are deleted
   - [ ] Given a non-existent feed ID, When I run the command, Then a "feed not found" error is shown
   - [ ] Given an existing feed, When I run the command with confirmation, Then the feed is removed with a success message showing feed name
 
-### US-003: List all feeds
+### US-003: [DELIVERED] List all feeds
 - **As a** site owner, **I want** to list all subscribed feeds via `rss:feed:list`, **so that** I can see what I'm subscribed to.
 - **Priority**: P1
 - **Points**: 2
 - **Dependencies**: US-001
+- **Status**: Delivered in Sprint 002
 - **Acceptance Criteria**:
   - [ ] Given existing feeds, When I run `rss:feed:list`, Then a table is displayed showing ID, title, URL, folder, article count, and last fetched date
   - [ ] Given no feeds, When I run the command, Then a "no feeds found" message is shown
 
-### US-004: Show feed details
+### US-004: [DELIVERED] Show feed details
 - **As a** site owner, **I want** to see details of a specific feed via `rss:feed:info {feed}`, **so that** I can inspect a feed's status.
 - **Priority**: P2
 - **Points**: 2
 - **Dependencies**: US-001
+- **Status**: Delivered in Sprint 002
 - **Acceptance Criteria**:
   - [ ] Given an existing feed ID, When I run `rss:feed:info 1`, Then detailed info is shown (title, URL, site URL, folder, article count, last fetched, created date)
   - [ ] Given a non-existent feed ID, When I run the command, Then a "feed not found" error is shown
@@ -63,30 +66,33 @@
   - [ ] Given a unique name, When I run `rss:folder:create Tech`, Then the folder is created with a success message
   - [ ] Given a duplicate name, When I run the command, Then a "folder already exists" error is shown
 
-### US-006: Delete a folder
+### US-006: [DELIVERED] Delete a folder
 - **As a** site owner, **I want** to delete a folder via `rss:folder:delete {folder}`, **so that** I can remove unused groups.
 - **Priority**: P2
 - **Points**: 2
 - **Dependencies**: US-005
+- **Status**: Delivered in Sprint 002
 - **Acceptance Criteria**:
   - [ ] Given an existing folder ID, When I run `rss:folder:delete 1`, Then the folder is deleted and its feeds are moved to "uncategorized"
   - [ ] Given a non-existent folder ID, When I run the command, Then a "folder not found" error is shown
 
-### US-007: Move a feed into a folder
+### US-007: [DELIVERED] Move a feed into a folder
 - **As a** site owner, **I want** to assign a feed to a folder via `rss:folder:move {feed} {folder}`, **so that** feeds are organized into categories.
 - **Priority**: P1
 - **Points**: 2
 - **Dependencies**: US-001, US-005
+- **Status**: Delivered in Sprint 002
 - **Acceptance Criteria**:
   - [ ] Given a valid feed ID and folder ID, When I run `rss:folder:move 1 2`, Then the feed is assigned to the folder
   - [ ] Given an invalid feed ID, When I run the command, Then a "feed not found" error is shown
   - [ ] Given an invalid folder ID, When I run the command, Then a "folder not found" error is shown
 
-### US-008: List all folders
+### US-008: [DELIVERED] List all folders
 - **As a** site owner, **I want** to list all folders via `rss:folder:list`, **so that** I can see my feed organization.
 - **Priority**: P2
 - **Points**: 2
 - **Dependencies**: US-005
+- **Status**: Delivered in Sprint 002
 - **Acceptance Criteria**:
   - [ ] Given existing folders, When I run `rss:folder:list`, Then a table is displayed showing ID, name, and number of feeds per folder
   - [ ] Given no folders, When I run the command, Then a "no folders found" message is shown
@@ -127,11 +133,12 @@
   - [ ] Given a feed that returns an error, When fetching all, Then the error is logged and other feeds continue fetching
   - [ ] Given no feeds, When I run the command, Then a "no feeds to fetch" message is shown
 
-### US-012: Fetch single feed command
+### US-012: [DELIVERED] Fetch single feed command
 - **As a** site owner, **I want** to run `rss:fetch {feed}` to fetch one feed, **so that** I can manually refresh a specific source.
 - **Priority**: P1
 - **Points**: 3
 - **Dependencies**: US-009, US-010
+- **Status**: Delivered in Sprint 002
 - **Acceptance Criteria**:
   - [ ] Given an existing feed ID, When I run `rss:fetch 1`, Then only that feed is fetched and results are shown
   - [ ] Given a non-existent feed ID, When I run the command, Then a "feed not found" error is shown
@@ -221,22 +228,24 @@
 
 ## Module: OPML Import/Export (CLI)
 
-### US-020: Import OPML file
+### US-020: [DELIVERED] Import OPML file
 - **As a** site owner, **I want** to import feeds from an OPML file via `rss:opml:import {file}`, **so that** I can migrate from another reader.
 - **Priority**: P1
 - **Points**: 5
 - **Dependencies**: US-001, US-005
+- **Status**: Delivered in Sprint 002
 - **Acceptance Criteria**:
   - [ ] Given a valid OPML file with feeds and folders, When I run `rss:opml:import subs.xml`, Then all feeds and folders are created
   - [ ] Given an OPML file with duplicate feeds (already subscribed), When imported, Then duplicates are skipped and reported
   - [ ] Given an invalid OPML file, When imported, Then a clear error message is shown
   - [ ] Given a successful import, When complete, Then a summary is displayed (added, skipped, errors)
 
-### US-021: Export OPML file
+### US-021: [DELIVERED] Export OPML file
 - **As a** site owner, **I want** to export feeds to an OPML file via `rss:opml:export {file}`, **so that** I can backup or migrate subscriptions.
 - **Priority**: P2
 - **Points**: 3
 - **Dependencies**: US-001
+- **Status**: Delivered in Sprint 002
 - **Acceptance Criteria**:
   - [ ] Given existing feeds and folders, When I run `rss:opml:export backup.xml`, Then a valid OPML file is created with all feeds organized by folder
   - [ ] Given no feeds, When I run the command, Then an OPML file with empty body is created
