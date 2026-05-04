@@ -63,6 +63,48 @@ class ArticleController extends Controller
         ]);
     }
 
+    /**
+     * Search articles by keyword with optional date and folder filters.
+     */
+    public function search(Request $request): Response
+    {
+        $query = trim($request->query('q', ''));
+        $date = $request->query('date');
+        $folderSlug = $request->query('folder');
+        $folder = $folderSlug ? Folder::where('slug', $folderSlug)->first() : null;
+
+        $articles = Article::query()
+            ->with('feed.folder')
+            ->when($query !== '', function ($q) use ($query) {
+                $term = '%'.mb_strtolower($query).'%';
+                $q->where(function ($q) use ($term) {
+                    $q->whereRaw('LOWER(title) LIKE ?', [$term])
+                        ->orWhereRaw('LOWER(content) LIKE ?', [$term]);
+                });
+            })
+            ->when($date, function ($q) use ($date) {
+                try {
+                    $parsed = Carbon::createFromFormat('Y-m-d', $date);
+                    $q->whereDate('published_at', $parsed->toDateString());
+                } catch (\Exception) {
+                    // Invalid date — skip filter
+                }
+            })
+            ->when($folder, fn ($q) => $q->whereHas('feed', fn ($q) => $q->where('folder_id', $folder->id)))
+            ->orderByDesc('published_at')
+            ->paginate(30)
+            ->withQueryString();
+
+        $folders = Folder::orderBy('name')->get();
+
+        return response()->view('articles.search', [
+            'articles' => $articles,
+            'query' => $query,
+            'folders' => $folders,
+            'activeFolder' => $folder,
+        ]);
+    }
+
     private function resolveDate(?string $date): Carbon
     {
         if ($date === null) {
