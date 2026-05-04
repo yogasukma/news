@@ -3,4 +3,4 @@
 | # | Name | Status | Started | Finished | Stories | Points |
 |---|------|--------|---------|----------|---------|--------|
 | 001 | core-reader | Completed | 2026-05-04 | 2026-05-04 | 12 | 47 |
-| 002 | opml-and-cli-tests | In Progress | 2026-05-04 | - | 9 | 23 |
+| 002 | opml-and-cli-tests | Completed | 2026-05-04 | 2026-05-04 | 9 | 23 |
