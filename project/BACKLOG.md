@@ -2,11 +2,11 @@
 
 ## Summary
 - Total stories: 34
-- Delivered: 32 (Sprint 001: 12, Sprint 002: 9, Sprint 003: 4, Sprint 004: 3, Sprint 005: 4)
-- Remaining: 2
+- Delivered: 34 (Sprint 001: 12, Sprint 002: 9, Sprint 003: 4, Sprint 004: 3, Sprint 005: 4, Sprint 006: 2)
+- Remaining: 0
 - Total story points: 130
-- Delivered points: 125
-- Remaining points: 5
+- Delivered points: 130
+- Remaining points: 0
 
 ---
 
@@ -396,22 +396,24 @@
 
 ## Module: Read State & Image Styling
 
-### US-033: Mark articles as read with localStorage
+### US-033: [DELIVERED] Mark articles as read with localStorage
 - **As a** public visitor, **I want** articles I've already read to be visually distinct from unread ones, **so that** I can easily see what's new.
 - **Priority**: P1
 - **Points**: 3
 - **Dependencies**: US-018
+- **Status**: Delivered in Sprint 006
 - **Acceptance Criteria**:
   - [ ] Given I open an article in the modal, When it loads, Then the article ID is stored in localStorage
   - [ ] Given an article is marked as read, When the article list renders, Then the card appears dimmed/muted compared to unread articles
   - [ ] Given localStorage entries exist, When they are older than 7 days, Then they are automatically cleaned up
   - [ ] Given a read article, When I view it, Then the title/text color is lighter and the card has reduced visual weight
 
-### US-034: Round images in article modal
+### US-034: [DELIVERED] Round images in article modal
 - **As a** public visitor, **I want** images in the article reading modal to have rounded corners, **so that** they look polished.
 - **Priority**: P2
 - **Points**: 2
 - **Dependencies**: US-018
+- **Status**: Delivered in Sprint 006
 - **Acceptance Criteria**:
   - [ ] Given an article with images in its content, When displayed in the modal, Then all images have border-radius applied
   - [ ] Given images in the modal, When rendered, Then the rounding is consistent and not overly dramatic

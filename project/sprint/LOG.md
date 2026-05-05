@@ -7,4 +7,4 @@
 | 003 | pwa-and-search | Completed | 2026-05-04 | 2026-05-04 | 4 | 13 |
 | 004 | ui-ux-polish | Completed | 2026-05-05 | 2026-05-05 | 3 | 12 |
 | 005 | fetch-health | Completed | 2026-05-05 | 2026-05-05 | 4 | 14 |
-| 006 | read-state-images | In Progress | 2026-05-05 | - | 2 | 5 |
+| 006 | read-state-images | Completed | 2026-05-05 | 2026-05-05 | 2 | 5 |
