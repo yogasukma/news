@@ -20,13 +20,22 @@ window.openArticle = async function (id) {
 
         modalTitle.textContent = article.title;
 
-        // Build meta line with optional favicon
-        let metaHtml = '';
+        // Build meta line with optional favicon (using DOM API to prevent XSS)
+        modalMeta.innerHTML = '';
         if (article.feed.favicon_url) {
-            metaHtml += `<img src="${article.feed.favicon_url}" alt="" class="w-4 h-4 rounded-sm inline-block align-text-bottom" onerror="this.style.display='none'"> `;
+            const faviconImg = document.createElement('img');
+            faviconImg.src = article.feed.favicon_url;
+            faviconImg.alt = '';
+            faviconImg.className = 'w-4 h-4 rounded-sm inline-block align-text-bottom';
+            faviconImg.loading = 'lazy';
+            faviconImg.onerror = function () { this.style.display = 'none'; };
+            modalMeta.appendChild(faviconImg);
+            modalMeta.appendChild(document.createTextNode(' '));
         }
-        metaHtml += `${article.feed.title}${article.author ? ` · by ${article.author}` : ''} · ${new Date(article.published_at).toLocaleString()}`;
-        modalMeta.innerHTML = metaHtml;
+        const metaText = document.createTextNode(
+            `${article.feed.title}${article.author ? ` · by ${article.author}` : ''} · ${new Date(article.published_at).toLocaleString()}`
+        );
+        modalMeta.appendChild(metaText);
         modalBody.innerHTML = article.content || '<p class="text-stone-400">No content available.</p>';
         modalOriginalLink.href = article.url;
 

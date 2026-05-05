@@ -58,6 +58,10 @@ function appendFragmentParam(url) {
 }
 
 async function navigateTo(url, pushState = true) {
+    if (isNavigating) {
+        return;
+    }
+
     const fragmentUrl = appendFragmentParam(url);
 
     if (!fragmentUrl) {
