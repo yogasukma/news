@@ -186,7 +186,7 @@ describe('US-009: Parse RSS 2.0 articles', function () {
         expect(Article::count())->toBe(1);
     });
 
-    it('AC3: uses current time as fallback when no published date', function () {
+    it('AC3: skips articles when no published date', function () {
         $feed = Feed::factory()->create(['url' => 'https://example.com/feed.xml']);
 
         Http::fake([
@@ -200,9 +200,7 @@ describe('US-009: Parse RSS 2.0 articles', function () {
 
         $this->artisan('rss:fetch', ['feed' => (string) $feed->id]);
 
-        $article = Article::first();
-        expect($article->published_at)->not->toBeNull();
-        expect($article->published_at->isToday())->toBeTrue();
+        expect(Article::count())->toBe(0);
     });
 });
 
@@ -370,13 +368,13 @@ describe('US-013: Handle feed errors', function () {
 // ============================================================================
 
 describe('US-014: Schedule automatic fetching', function () {
-    it('AC1+AC2: rss:fetch is scheduled hourly in the scheduler', function () {
+    it('AC1+AC2: rss:fetch is scheduled every 4 hours', function () {
         $schedule = app(Illuminate\Console\Scheduling\Schedule::class);
         $events = $schedule->events();
         $fetchEvent = collect($events)->first(fn ($event) => str_contains($event->command, 'rss:fetch'));
 
         expect($fetchEvent)->not->toBeNull('rss:fetch should be scheduled');
-        expect($fetchEvent->expression)->toBe('0 * * * *', 'rss:fetch should run hourly');
+        expect($fetchEvent->expression)->toBe('0 */4 * * *', 'rss:fetch should run every 4 hours');
     });
 });
 

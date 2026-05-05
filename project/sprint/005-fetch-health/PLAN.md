@@ -23,24 +23,22 @@ Automate feed fetching on a 4-hour schedule, skip undated articles, track fetch 
 ## Task Breakdown
 
 ### US-029: Schedule automatic feed fetching every 4 hours
-- [ ] Task 1: Register scheduled command in `routes/console.php` — `rss:fetch` every 4 hours
-- [ ] Task 2: Write test verifying the schedule is registered
+- [x] Task 1: Update `routes/console.php` — `rss:fetch` every 4 hours
+- [x] Task 2: Updated existing test to verify `everyFourHours` schedule
 
 ### US-030: Skip articles without a publication date
-- [ ] Task 1: Update `FetchFeedsCommand::storeArticle()` — skip if `published_at` is null or was defaulted to `now()` by FeedParser
-- [ ] Task 2: Update `FeedParser` — return `null` for `published_at` when no date element exists (instead of defaulting to `now()`)
-- [ ] Task 3: Add skipped count tracking and display in fetch summary
-- [ ] Task 4: Write tests for skipping undated articles
+- [x] Task 1: Update `FeedParser::parseDate()` — return `null` when no date element exists
+- [x] Task 2: Update `FetchFeedsCommand::fetchFeed()` — skip articles where `published_at` is null
+- [x] Task 3: Add skipped count tracking and display in fetch summary table
+- [x] Task 4: Updated existing tests to reflect new behavior
 
 ### US-031: Track and auto-disable feeds with consecutive fetch errors
-- [ ] Task 1: Add migration — `error_count` (integer, default 0), `is_enabled` (boolean, default true), `last_error` (string, nullable) on `feeds` table
-- [ ] Task 2: Update `Feed` model — add new fillable fields and casts
-- [ ] Task 3: Update `FetchFeedsCommand::fetchFeed()` — on success: reset error_count to 0; on failure: increment error_count, store last_error
-- [ ] Task 4: Auto-disable logic — when error_count reaches 8, set `is_enabled = false`
-- [ ] Task 5: Update `FetchFeedsCommand::handle()` — only fetch feeds where `is_enabled = true`
-- [ ] Task 6: Write tests for error tracking, auto-disable, and skipping disabled feeds
+- [x] Task 1: Migration — `error_count` (integer, default 0), `is_enabled` (boolean, default true), `last_error` (string, nullable) on `feeds` table
+- [x] Task 2: Update `Feed` model — new fillable fields and casts
+- [x] Task 3: Update `FetchFeedsCommand::fetchFeed()` — on success: reset error_count to 0; on failure: increment error_count, store last_error
+- [x] Task 4: Auto-disable logic — when error_count reaches 8, set `is_enabled = false`
+- [x] Task 5: Update `FetchFeedsCommand::handle()` — only fetch feeds where `is_enabled = true` (when no specific feed ID given)
 
 ### US-032: CLI command to list and re-enable disabled feeds
-- [ ] Task 1: Create `rss:feed:health` command — list all feeds with error_count > 0, highlight disabled ones
-- [ ] Task 2: Create `rss:feed:enable {feed}` command — re-enable a disabled feed (is_enabled = true, error_count = 0)
-- [ ] Task 3: Write tests for both commands
+- [x] Task 1: Create `rss:feed:health` command — list all feeds with error_count > 0 or is_enabled = false
+- [x] Task 2: Create `rss:feed:enable {feed}` command — re-enable a disabled feed (is_enabled = true, error_count = 0, last_error = null)

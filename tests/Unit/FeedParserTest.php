@@ -97,7 +97,7 @@ describe('RSS 2.0 parsing', function () {
         expect($result['articles'][0]['cover_image'])->toBe('https://example.com/image.jpg');
     });
 
-    it('uses fallback published_at when no date', function () {
+    it('returns null published_at when no date', function () {
         $parser = new FeedParser;
 
         $xml = <<<'XML'
@@ -118,7 +118,7 @@ describe('RSS 2.0 parsing', function () {
 
         $result = $parser->parseRss($parser->parseXml($xml), 'https://example.com/feed.xml');
 
-        expect($result['articles'][0]['published_at'])->not->toBeEmpty();
+        expect($result['articles'][0]['published_at'])->toBeNull();
     });
 });
 

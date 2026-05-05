@@ -7,6 +7,7 @@ use App\Models\Feed;
 use App\Services\FeedParser;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class FetchFeedsCommand extends Command
 {
@@ -20,11 +21,15 @@ class FetchFeedsCommand extends Command
 
     private int $errors = 0;
 
+    private int $skipped = 0;
+
     public function handle(FeedParser $parser): int
     {
-        $feeds = $this->argument('feed')
-            ? Feed::where('id', (int) $this->argument('feed'))->get()
-            : Feed::all();
+        $specificFeed = $this->argument('feed');
+
+        $feeds = $specificFeed
+            ? Feed::where('id', (int) $specificFeed)->get()
+            : Feed::where('is_enabled', true)->get();
 
         if ($feeds->isEmpty()) {
             $this->info('No feeds to fetch.');
@@ -49,6 +54,7 @@ class FetchFeedsCommand extends Command
             [
                 ['Feeds fetched', $this->fetched],
                 ['New articles', $this->newArticles],
+                ['Skipped (no date)', $this->skipped],
                 ['Errors', $this->errors],
             ]
         );
@@ -76,13 +82,28 @@ class FetchFeedsCommand extends Command
                 }
             }
 
+            // Clear error state on success
+            if ($feed->error_count > 0 || $feed->last_error !== null) {
+                $updates['error_count'] = 0;
+                $updates['last_error'] = null;
+            }
+
+            $updates['last_fetched_at'] = now();
+
             if ($updates) {
                 $feed->update($updates);
             }
 
             $newForFeed = 0;
+            $skippedForFeed = 0;
 
             foreach ($result['articles'] as $articleData) {
+                if ($articleData['published_at'] === null) {
+                    $skippedForFeed++;
+
+                    continue;
+                }
+
                 $article = $this->storeArticle($feed, $articleData);
 
                 if ($article->wasRecentlyCreated) {
@@ -90,19 +111,39 @@ class FetchFeedsCommand extends Command
                 }
             }
 
-            $feed->update(['last_fetched_at' => now()]);
-
             $this->fetched++;
             $this->newArticles += $newForFeed;
+            $this->skipped += $skippedForFeed;
 
-            $this->line("  ✓ {$feed->title}: {$newForFeed} new article(s)");
+            $summary = "  ✓ {$feed->title}: {$newForFeed} new article(s)";
+            if ($skippedForFeed > 0) {
+                $summary .= ", {$skippedForFeed} skipped (no date)";
+            }
+            $this->line($summary);
         } catch (\Exception $e) {
             $this->errors++;
-            $this->error("  ✗ {$feed->title}: {$e->getMessage()}");
+
+            $newErrorCount = $feed->error_count + 1;
+            $updates = [
+                'error_count' => $newErrorCount,
+                'last_error' => Str::limit($e->getMessage(), 255),
+                'last_fetched_at' => now(),
+            ];
+
+            // Auto-disable after 8 consecutive errors
+            if ($newErrorCount >= 8) {
+                $updates['is_enabled'] = false;
+            }
+
+            $feed->update($updates);
+
+            $disabled = ($newErrorCount >= 8) ? ' [DISABLED]' : '';
+            $this->error("  ✗ {$feed->title}: {$e->getMessage()} (errors: {$newErrorCount}){$disabled}");
             Log::warning("Feed fetch failed: {$feed->title}", [
                 'feed_id' => $feed->id,
                 'url' => $feed->url,
                 'error' => $e->getMessage(),
+                'error_count' => $newErrorCount,
             ]);
         }
     }

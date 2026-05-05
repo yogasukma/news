@@ -21,6 +21,9 @@ class FeedFactory extends Factory
             'favicon_url' => null,
             'folder_id' => null,
             'last_fetched_at' => null,
+            'error_count' => 0,
+            'is_enabled' => true,
+            'last_error' => null,
         ];
     }
 

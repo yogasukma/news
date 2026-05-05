@@ -19,12 +19,16 @@ class Feed extends Model
         'favicon_url',
         'folder_id',
         'last_fetched_at',
+        'error_count',
+        'is_enabled',
+        'last_error',
     ];
 
     protected function casts(): array
     {
         return [
             'last_fetched_at' => 'datetime',
+            'is_enabled' => 'boolean',
         ];
     }
 
