@@ -42,6 +42,11 @@ window.openArticle = async function (id) {
         modal.classList.remove('hidden');
         document.body.style.overflow = 'hidden';
 
+        // Mark article as read
+        if (window.ReadState) {
+            window.ReadState.markRead(article.id);
+        }
+
         modalClose.focus();
     } catch {
         // Silently handle network errors

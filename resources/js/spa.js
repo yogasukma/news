@@ -95,6 +95,11 @@ async function navigateTo(url, pushState = true) {
 
         // Scroll to top of main content
         mainEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        // Re-apply read state to new article cards
+        if (window.ReadState) {
+            window.ReadState.applyReadState();
+        }
     } catch {
         // Network error — fall back to normal navigation
         window.location.href = url;

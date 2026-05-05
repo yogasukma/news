@@ -21,3 +21,16 @@
         width: 70%;
     }
 }
+
+/* Round images in article modal */
+#modal-body img {
+    border-radius: 0.5rem;
+}
+
+/* Read article card — dimmed/muted */
+.is-read {
+    opacity: 0.55;
+}
+.is-read h2 {
+    color: var(--color-stone-400);
+}
