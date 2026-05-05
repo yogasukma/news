@@ -6,3 +6,4 @@
 | 002 | opml-and-cli-tests | Completed | 2026-05-04 | 2026-05-04 | 9 | 23 |
 | 003 | pwa-and-search | Completed | 2026-05-04 | 2026-05-04 | 4 | 13 |
 | 004 | ui-ux-polish | Completed | 2026-05-05 | 2026-05-05 | 3 | 12 |
+| 005 | fetch-health | In Progress | 2026-05-05 | - | 4 | 14 |
