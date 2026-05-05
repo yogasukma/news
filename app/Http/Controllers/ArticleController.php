@@ -30,14 +30,20 @@ class ArticleController extends Controller
 
         $folders = Folder::orderBy('name')->get();
 
-        return response()->view('articles.index', [
+        $data = [
             'articles' => $articles,
             'currentDate' => $date,
             'previousDate' => $date->copy()->subDay(),
             'nextDate' => $date->isToday() ? null : $date->copy()->addDay(),
             'folders' => $folders,
             'activeFolder' => $folder,
-        ]);
+        ];
+
+        if ($request->query('fragment') === '1') {
+            return response()->view('articles.partials.index-content', $data);
+        }
+
+        return response()->view('articles.index', $data);
     }
 
     /**
@@ -59,6 +65,7 @@ class ArticleController extends Controller
                 'id' => $article->feed->id,
                 'title' => $article->feed->title,
                 'site_url' => $article->feed->site_url,
+                'favicon_url' => $article->feed->favicon_url,
             ],
         ]);
     }
@@ -97,12 +104,18 @@ class ArticleController extends Controller
 
         $folders = Folder::orderBy('name')->get();
 
-        return response()->view('articles.search', [
+        $data = [
             'articles' => $articles,
             'query' => $query,
             'folders' => $folders,
             'activeFolder' => $folder,
-        ]);
+        ];
+
+        if ($request->query('fragment') === '1') {
+            return response()->view('articles.partials.search-content', $data);
+        }
+
+        return response()->view('articles.search', $data);
     }
 
     private function resolveDate(?string $date): Carbon

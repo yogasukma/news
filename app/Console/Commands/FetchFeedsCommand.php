@@ -61,9 +61,23 @@ class FetchFeedsCommand extends Command
         try {
             $result = $parser->parse($feed->url);
 
+            $updates = [];
+
             // Update feed metadata if title changed
             if ($result['feed']['title'] && $result['feed']['title'] !== $feed->title) {
-                $feed->update(['title' => $result['feed']['title']]);
+                $updates['title'] = $result['feed']['title'];
+            }
+
+            // Populate favicon_url if missing
+            if (empty($feed->favicon_url) && ($result['feed']['site_url'] ?? null)) {
+                $domain = parse_url($result['feed']['site_url'], PHP_URL_HOST);
+                if ($domain) {
+                    $updates['favicon_url'] = 'https://www.google.com/s2/favicons?domain='.$domain.'&sz=32';
+                }
+            }
+
+            if ($updates) {
+                $feed->update($updates);
             }
 
             $newForFeed = 0;

@@ -19,7 +19,14 @@ window.openArticle = async function (id) {
         const article = await response.json();
 
         modalTitle.textContent = article.title;
-        modalMeta.textContent = `${article.feed.title}${article.author ? ` · by ${article.author}` : ''} · ${new Date(article.published_at).toLocaleString()}`;
+
+        // Build meta line with optional favicon
+        let metaHtml = '';
+        if (article.feed.favicon_url) {
+            metaHtml += `<img src="${article.feed.favicon_url}" alt="" class="w-4 h-4 rounded-sm inline-block align-text-bottom" onerror="this.style.display='none'"> `;
+        }
+        metaHtml += `${article.feed.title}${article.author ? ` · by ${article.author}` : ''} · ${new Date(article.published_at).toLocaleString()}`;
+        modalMeta.innerHTML = metaHtml;
         modalBody.innerHTML = article.content || '<p class="text-stone-400">No content available.</p>';
         modalOriginalLink.href = article.url;
 

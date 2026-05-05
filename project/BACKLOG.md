@@ -1,12 +1,12 @@
 # Product Backlog
 
 ## Summary
-- Total stories: 25
+- Total stories: 28
 - Delivered: 25 (Sprint 001: 12, Sprint 002: 9, Sprint 003: 4)
-- Remaining: 0
-- Total story points: 99
+- Remaining: 3
+- Total story points: 112
 - Delivered points: 99
-- Remaining points: 0
+- Remaining points: 13
 
 ---
 
@@ -301,3 +301,41 @@
 - **Acceptance Criteria**:
   - [ ] Given a search within a date range, When results are shown, Then only articles within that range appear
   - [ ] Given a search within a folder, When results are shown, Then only articles from that folder appear
+
+---
+
+## Module: UI/UX Polish
+
+### US-026: Show favicon before feed name
+- **As a** public visitor, **I want** to see each feed's favicon next to its name in article cards and the reading modal, **so that** I can quickly identify the source visually.
+- **Priority**: P1
+- **Points**: 3
+- **Dependencies**: US-018
+- **Acceptance Criteria**:
+  - [ ] Given an article card, When displayed, Then the feed's favicon appears before the feed name
+  - [ ] Given an article in the reading modal, When displayed, Then the feed's favicon appears next to the feed name in the modal header
+  - [ ] Given a feed with no favicon, When displayed, Then a fallback icon is shown instead
+  - [ ] Given favicons are loaded, Then they are cached to avoid repeated external requests
+
+### US-027: Improve article card hover effects
+- **As a** public visitor, **I want** article cards to have a clear visual hover effect, **so that** I can tell which card I'm about to click.
+- **Priority**: P1
+- **Points**: 1
+- **Dependencies**: US-018
+- **Acceptance Criteria**:
+  - [ ] Given an article card, When I hover over it, Then a visible shadow/elevation change and subtle border color change occurs
+  - [ ] Given an article card, When I hover over it, Then the cursor changes to pointer
+  - [ ] Given the transition, When hovering on/off, Then it animates smoothly (not instant)
+
+### US-028: SPA-like navigation for dates, folders, and search
+- **As a** public visitor, **I want** to switch between dates, filter by folder, and search without the page reloading, **so that** the experience feels fast and fluid like a native app.
+- **Priority**: P1
+- **Points**: 8
+- **Dependencies**: US-016, US-017, US-024
+- **Acceptance Criteria**:
+  - [ ] Given I am on the homepage, When I click a date navigation link, Then the article list updates without a full page reload
+  - [ ] Given I am on the homepage, When I click a folder filter pill, Then the article list updates without a full page reload
+  - [ ] Given I am searching, When I submit the search form, Then results appear without a full page reload
+  - [ ] Given I navigate via SPA, When done, Then the browser URL updates to reflect the current view
+  - [ ] Given I navigate via SPA, When I press browser back/forward, Then the correct previous view is restored
+  - [ ] Given a navigation is in progress, Then a subtle loading indicator is shown

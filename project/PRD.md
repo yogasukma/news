@@ -100,6 +100,16 @@
   - Display search results with relevance
 - **Priority**: Nice-to-have
 
+### Module 7: UI/UX Polish
+- **Description**: Enhance the reading experience with favicons, better interactions, and SPA-like navigation
+- **Key features**:
+  - Show favicon before each feed/site name in article cards and modal
+  - More visible hover effects on article cards
+  - SPA-like navigation — switch dates, folders, and search without full page reloads
+  - Smooth transitions during navigation
+  - Browser back/forward support via History API
+- **Priority**: Must-have
+
 ## 5. Non-Functional Requirements
 
 - **Performance**: Article list should load in under 500ms; feed fetching should not block the web UI
