@@ -9,4 +9,4 @@
 | 005 | fetch-health | Completed | 2026-05-05 | 2026-05-05 | 4 | 14 |
 | 006 | read-state-images | Completed | 2026-05-05 | 2026-05-05 | 2 | 5 |
 | 007 | recent-feeds-fallback | Completed | 2026-05-05 | 2026-05-05 | 2 | 7 |
-| 008 | search-date-display | In Progress | 2026-05-05 | - | 1 | 2 |
+| 008 | search-date-display | Completed | 2026-05-05 | 2026-05-05 | 1 | 2 |
