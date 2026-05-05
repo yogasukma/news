@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Feed;
 use Illuminate\Console\Command;
+use Illuminate\Support\Str;
 
 class FeedHealthCommand extends Command
 {
