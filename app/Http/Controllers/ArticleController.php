@@ -21,12 +21,30 @@ class ArticleController extends Controller
         $folderSlug = $request->query('folder');
         $folder = $folderSlug ? Folder::where('slug', $folderSlug)->first() : null;
 
+        $mode = 'today';
+
         $articles = Article::query()
             ->with('feed.folder')
             ->whereDate('published_at', $date->toDateString())
             ->when($folder, fn ($q) => $q->whereHas('feed', fn ($q) => $q->where('folder_id', $folder->id)))
             ->orderByDesc('published_at')
             ->get();
+
+        // Fallback to recent feeds when today has fewer than 20 articles
+        if ($date->isToday() && $articles->count() < 20) {
+            $mode = 'recent';
+
+            $articles = Article::query()
+                ->with('feed.folder')
+                ->when($folder, fn ($q) => $q->whereHas('feed', fn ($q) => $q->where('folder_id', $folder->id)))
+                ->orderByDesc('published_at')
+                ->limit(20)
+                ->get();
+        }
+
+        if (! $date->isToday()) {
+            $mode = 'date';
+        }
 
         $folders = Folder::orderBy('name')->get();
 
@@ -37,6 +55,7 @@ class ArticleController extends Controller
             'nextDate' => $date->isToday() ? null : $date->copy()->addDay(),
             'folders' => $folders,
             'activeFolder' => $folder,
+            'mode' => $mode,
         ];
 
         if ($request->query('fragment') === '1') {
