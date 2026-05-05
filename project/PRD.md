@@ -100,6 +100,36 @@
   - Display search results with relevance
 - **Priority**: Nice-to-have
 
+### Module 7: UI/UX Polish
+- **Description**: Enhance the reading experience with favicons, better interactions, and SPA-like navigation
+- **Key features**:
+  - Show favicon before each feed/site name in article cards and modal
+  - More visible hover effects on article cards
+  - SPA-like navigation — switch dates, folders, and search without full page reloads
+  - Smooth transitions during navigation
+  - Browser back/forward support via History API
+- **Priority**: Must-have
+
+### Module 8: Scheduled Fetching & Feed Health
+- **Description**: Automate feed fetching on a schedule, skip invalid articles, and auto-disable chronically broken feeds
+- **Key features**:
+  - Scheduled fetch every 4 hours via Laravel scheduler
+  - Skip articles without a publication date (do not save them)
+  - Track consecutive fetch errors per feed with an error counter
+  - Auto-disable feeds after 8 consecutive errors
+  - Clear error count on successful fetch
+  - CLI command to list/reenable disabled feeds
+- **Priority**: Must-have
+
+### Module 9: Read State & Image Styling
+- **Description**: Track which articles the visitor has read using browser localStorage, with visual distinction and automatic cleanup. Also round images in the article modal.
+- **Key features**:
+  - Mark articles as read when opened in the modal (stored in localStorage)
+  - Visual feedback: read articles appear dimmed/muted in the article list
+  - localStorage entries expire after 7 days (auto-cleaned)
+  - All images in the article modal have border-radius
+- **Priority**: Must-have
+
 ## 5. Non-Functional Requirements
 
 - **Performance**: Article list should load in under 500ms; feed fetching should not block the web UI
