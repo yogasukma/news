@@ -20,7 +20,7 @@
     <header class="border-b border-stone-200 bg-white sticky top-0 z-30">
         <div class="max-w-2xl mx-auto px-4 py-4 flex items-center justify-between gap-4">
             <a href="/" class="text-xl font-semibold tracking-tight text-stone-900 hover:text-stone-600 transition-colors shrink-0">
-                RSS Reader
+                {{ $title ?? 'RSS Reader' }}
             </a>
             <form action="{{ route('search') }}" method="GET" data-spa-search class="flex-1 max-w-xs">
                 <input type="search"
