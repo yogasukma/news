@@ -317,7 +317,7 @@ describe('US-028: SPA data attributes', function () {
 
     it('includes data-spa-date on date picker', function () {
         $feed = Feed::factory()->create();
-        Article::factory()->today()->create(['feed_id' => $feed->id]);
+        Article::factory()->count(20)->today()->create(['feed_id' => $feed->id]);
 
         $response = $this->get('/');
 

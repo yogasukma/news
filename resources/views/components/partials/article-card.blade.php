@@ -1,4 +1,7 @@
-@props(['article'])
+@props([
+    'article',
+    'mode' => 'today',
+])
 
 <article class="bg-white rounded-lg border border-stone-200 overflow-hidden hover:border-stone-400 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 ease-out group cursor-pointer"
          data-article-id="{{ $article->id }}"
@@ -37,7 +40,7 @@
             @endif
             <span class="text-stone-300">·</span>
             <time datetime="{{ $article->published_at->toIso8601String() }}">
-                {{ $article->published_at->format('g:i A') }}
+                {{ $mode === 'recent' ? $article->published_at->format('M j, g:i A') : $article->published_at->format('g:i A') }}
             </time>
         </div>
 

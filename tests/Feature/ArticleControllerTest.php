@@ -17,7 +17,7 @@ describe('homepage', function () {
     it('shows empty state when no articles today', function () {
         $this->get('/')
             ->assertSuccessful()
-            ->assertSee('No articles on this date');
+            ->assertSee('No articles found');
     });
 });
 

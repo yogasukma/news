@@ -130,6 +130,16 @@
   - All images in the article modal have border-radius
 - **Priority**: Must-have
 
+### Module 10: Smart Recent Feeds
+- **Description**: Enhance the homepage to handle days with few or no articles by automatically switching to a "Recent Feeds" mode that backfills from previous days.
+- **Key features**:
+  - **Threshold behavior**: When visiting the homepage (today), if today's articles total less than 20, the view switches from "Today's Feeds" to "Recent Feeds"
+  - **Recent Feeds mode**: Shows the 20 most recent articles across all dates (e.g., backfilling from yesterday, the day before, etc.)
+  - **Date+time display**: In "Recent Feeds" mode, article cards show both the date and time (not just time), since articles span multiple days
+  - **Only applies to homepage**: When navigating to a specific past date, the current date-scoped behavior remains unchanged
+  - **Folder filter works**: The folder filter still applies within the "Recent Feeds" result set
+- **Priority**: Must-have
+
 ## 5. Non-Functional Requirements
 
 - **Performance**: Article list should load in under 500ms; feed fetching should not block the web UI
