@@ -2,11 +2,11 @@
 
 ## Summary
 - Total stories: 32
-- Delivered: 28 (Sprint 001: 12, Sprint 002: 9, Sprint 003: 4, Sprint 004: 3)
-- Remaining: 4
+- Delivered: 32 (Sprint 001: 12, Sprint 002: 9, Sprint 003: 4, Sprint 004: 3, Sprint 005: 4)
+- Remaining: 0
 - Total story points: 125
-- Delivered points: 111
-- Remaining points: 14
+- Delivered points: 125
+- Remaining points: 0
 
 ---
 
@@ -347,30 +347,33 @@
 
 ## Module: Scheduled Fetching & Feed Health
 
-### US-029: Schedule automatic feed fetching every 4 hours
+### US-029: [DELIVERED] Schedule automatic feed fetching every 4 hours
 - **As a** the site owner, **I want** feeds to be fetched automatically every 4 hours, **so that** new articles appear without manual intervention.
 - **Priority**: P0
 - **Points**: 2
 - **Dependencies**: None
+- **Status**: Delivered in Sprint 005
 - **Acceptance Criteria**:
   - [ ] Given the scheduler is running, When 4 hours have passed, Then `rss:fetch` runs automatically
   - [ ] Given the scheduler is configured, Then it runs even when no one is actively using the site
 
-### US-030: Skip articles without a publication date
+### US-030: [DELIVERED] Skip articles without a publication date
 - **As a** the site owner, **I want** articles that lack a publication date to be skipped during fetch, **so that** the database only contains properly dated articles.
 - **Priority**: P1
 - **Points**: 2
 - **Dependencies**: None
+- **Status**: Delivered in Sprint 005
 - **Acceptance Criteria**:
   - [ ] Given an article in a feed with no published/pubDate/updated element, When fetched, Then the article is not saved to the database
   - [ ] Given an article with a valid publication date in the same feed, When fetched, Then that article is saved normally
   - [ ] Given an article is skipped, When the fetch completes, Then the summary output notes how many articles were skipped
 
-### US-031: Track and auto-disable feeds with consecutive fetch errors
+### US-031: [DELIVERED] Track and auto-disable feeds with consecutive fetch errors
 - **As a** the site owner, **I want** feeds that repeatedly fail to be tracked and eventually auto-disabled, **so that** broken feeds don't waste resources indefinitely.
 - **Priority**: P1
 - **Points**: 8
 - **Dependencies**: US-029
+- **Status**: Delivered in Sprint 005
 - **Acceptance Criteria**:
   - [ ] Given a feed fetch succeeds, When complete, Then the feed's error_count is reset to 0
   - [ ] Given a feed fetch fails, When complete, Then the feed's error_count is incremented by 1
@@ -378,11 +381,12 @@
   - [ ] Given a disabled feed, When the scheduler runs, Then that feed is skipped entirely
   - [ ] Given a feed that was previously failing, When a fetch succeeds, Then error_count is cleared even if it was > 0
 
-### US-032: CLI command to list and re-enable disabled feeds
+### US-032: [DELIVERED] CLI command to list and re-enable disabled feeds
 - **As a** the site owner, **I want** to see which feeds are disabled and be able to re-enable them, **so that** I can manage feed health from the CLI.
 - **Priority**: P2
 - **Points**: 2
 - **Dependencies**: US-031
+- **Status**: Delivered in Sprint 005
 - **Acceptance Criteria**:
   - [ ] Given I run `rss:feed:health`, When there are disabled feeds, Then they are listed with name, URL, error_count, and last error message
   - [ ] Given I run `rss:feed:enable {feed}`, Then the feed is re-enabled (is_enabled = true, error_count = 0)
