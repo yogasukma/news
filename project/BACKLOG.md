@@ -2,11 +2,11 @@
 
 ## Summary
 - Total stories: 36
-- Delivered: 34 (Sprint 001: 12, Sprint 002: 9, Sprint 003: 4, Sprint 004: 3, Sprint 005: 4, Sprint 006: 2)
-- Remaining: 2
+- Delivered: 36 (Sprint 001: 12, Sprint 002: 9, Sprint 003: 4, Sprint 004: 3, Sprint 005: 4, Sprint 006: 2, Sprint 007: 2)
+- Remaining: 0
 - Total story points: 137
-- Delivered points: 130
-- Remaining points: 7
+- Delivered points: 137
+- Remaining points: 0
 
 ---
 
@@ -422,12 +422,12 @@
 
 ## Module: Smart Recent Feeds
 
-### US-035: Smart homepage — Recent Feeds fallback when today has few articles
+### US-035: [DELIVERED] Smart homepage — Recent Feeds fallback when today has few articles
 - **As a** public visitor, **I want** the homepage to always show a meaningful list of articles, **so that** the page doesn't feel empty on days with few or no new posts.
 - **Priority**: P1
 - **Points**: 5
 - **Dependencies**: US-015
-- **Status**: Pending
+- **Status**: Delivered in Sprint 007
 - **Acceptance Criteria**:
   - [ ] Given today has 20 or more articles, When I visit the homepage, Then the page title shows "Today's Feeds" and only today's articles are displayed (existing behavior unchanged)
   - [ ] Given today has fewer than 20 articles, When I visit the homepage, Then the page title shows "Recent Feeds" and the 20 most recent articles are displayed (regardless of date)
@@ -436,12 +436,12 @@
   - [ ] Given "Recent Feeds" mode, When the article count is displayed, Then it reflects the actual number of articles shown
   - [ ] Given the SPA fetches the homepage fragment, When today has < 20 articles, Then the fragment returns "Recent Feeds" mode with 20 recent articles
 
-### US-036: Show date and time on article cards in Recent Feeds mode
+### US-036: [DELIVERED] Show date and time on article cards in Recent Feeds mode
 - **As a** public visitor, **I want** article cards to show both date and time when viewing "Recent Feeds", **so that** I can tell which articles are from today versus previous days.
 - **Priority**: P1
 - **Points**: 2
 - **Dependencies**: US-035
-- **Status**: Pending
+- **Status**: Delivered in Sprint 007
 - **Acceptance Criteria**:
   - [ ] Given "Today's Feeds" mode is active, When article cards are rendered, Then only the time is shown (existing behavior — e.g., "3:45 PM")
   - [ ] Given "Recent Feeds" mode is active, When article cards are rendered, Then both date and time are shown (e.g., "May 4, 3:45 PM")
