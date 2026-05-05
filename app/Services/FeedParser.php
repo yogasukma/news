@@ -25,7 +25,7 @@ class FeedParser
     /**
      * Fetch and parse a feed URL, returning normalized feed metadata and articles.
      *
-     * @return array{feed: array{title: string, site_url: ?string, description: ?string}, articles: array<int, array{title: string, url: string, content: ?string, author: ?string, published_at: string, cover_image: ?string, external_id: ?string}>}
+     * @return array{feed: array{title: string, site_url: ?string, description: ?string}, articles: array<int, array{title: string, url: string, content: ?string, author: ?string, published_at: ?string, cover_image: ?string, external_id: ?string}>}
      *
      * @throws \Exception
      */
@@ -118,7 +118,7 @@ class FeedParser
     /**
      * Parse a single RSS item.
      *
-     * @return array{title: string, url: string, content: ?string, author: ?string, published_at: string, cover_image: ?string, external_id: ?string}
+     * @return array{title: string, url: string, content: ?string, author: ?string, published_at: ?string, cover_image: ?string, external_id: ?string}
      */
     protected function parseRssItem(\SimpleXMLElement $item): array
     {
@@ -219,7 +219,7 @@ class FeedParser
     /**
      * Parse a single Atom entry.
      *
-     * @return array{title: string, url: string, content: ?string, author: ?string, published_at: string, cover_image: ?string, external_id: ?string}
+     * @return array{title: string, url: string, content: ?string, author: ?string, published_at: ?string, cover_image: ?string, external_id: ?string}
      */
     protected function parseAtomEntry(\SimpleXMLElement $entry): array
     {
@@ -290,17 +290,18 @@ class FeedParser
 
     /**
      * Parse a date string into ISO 8601 format.
+     * Returns null when no date is available.
      */
-    protected function parseDate(?string $date): string
+    protected function parseDate(?string $date): ?string
     {
         if ($date === null || $date === '') {
-            return now()->toIso8601String();
+            return null;
         }
 
         try {
             return (string) Carbon::parse($date)->toIso8601String();
         } catch (\Exception) {
-            return now()->toIso8601String();
+            return null;
         }
     }
 

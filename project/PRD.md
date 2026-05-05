@@ -110,6 +110,17 @@
   - Browser back/forward support via History API
 - **Priority**: Must-have
 
+### Module 8: Scheduled Fetching & Feed Health
+- **Description**: Automate feed fetching on a schedule, skip invalid articles, and auto-disable chronically broken feeds
+- **Key features**:
+  - Scheduled fetch every 4 hours via Laravel scheduler
+  - Skip articles without a publication date (do not save them)
+  - Track consecutive fetch errors per feed with an error counter
+  - Auto-disable feeds after 8 consecutive errors
+  - Clear error count on successful fetch
+  - CLI command to list/reenable disabled feeds
+- **Priority**: Must-have
+
 ## 5. Non-Functional Requirements
 
 - **Performance**: Article list should load in under 500ms; feed fetching should not block the web UI

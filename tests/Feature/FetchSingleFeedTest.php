@@ -53,5 +53,8 @@ it('shows error when single feed fetch fails', function () {
         ->expectsOutput('Fetch complete.')
         ->assertSuccessful();
 
-    expect($feed->fresh()->last_fetched_at)->toBeNull();
+    // Error tracking: error_count incremented, last_error set
+    $fresh = $feed->fresh();
+    expect($fresh->error_count)->toBe(1);
+    expect($fresh->last_error)->not->toBeNull();
 });
