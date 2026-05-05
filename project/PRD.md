@@ -121,6 +121,15 @@
   - CLI command to list/reenable disabled feeds
 - **Priority**: Must-have
 
+### Module 9: Read State & Image Styling
+- **Description**: Track which articles the visitor has read using browser localStorage, with visual distinction and automatic cleanup. Also round images in the article modal.
+- **Key features**:
+  - Mark articles as read when opened in the modal (stored in localStorage)
+  - Visual feedback: read articles appear dimmed/muted in the article list
+  - localStorage entries expire after 7 days (auto-cleaned)
+  - All images in the article modal have border-radius
+- **Priority**: Must-have
+
 ## 5. Non-Functional Requirements
 
 - **Performance**: Article list should load in under 500ms; feed fetching should not block the web UI
