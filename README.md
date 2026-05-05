@@ -1,59 +1,105 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# RSS Reader
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A minimal, self-hosted RSS reader with a public-facing read-only web interface and CLI-based administration. Browse and read articles in a clean, distraction-free interface — no accounts, no login required.
 
-## About Laravel
+## Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Public reading interface** — single-column, typography-first design. One page per date, like a personal newspaper
+- **SPA-like navigation** — switch dates, filter by folder, and search without page reloads
+- **Full-text search** — search across all articles by keyword, combinable with date and folder filters
+- **Read state tracking** — articles you've opened are visually dimmed (stored in localStorage, auto-cleaned after 7 days)
+- **PWA installable** — add to home screen on any device for a native-like reading experience with offline caching
+- **CLI administration** — manage feeds, folders, and imports entirely through Artisan commands
+- **Feed health monitoring** — broken feeds are tracked and auto-disabled after 8 consecutive errors
+- **OPML import/export** — migrate subscriptions to/from any RSS reader
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Tech Stack
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Backend**: Laravel 12, PHP 8.2
+- **Database**: SQLite
+- **Frontend**: Blade templates, Tailwind CSS v4, vanilla JavaScript
+- **Testing**: Pest 3
 
-## Learning Laravel
+## Quick Start
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+```bash
+# Clone the repository
+git clone <repo-url> rss && cd rss
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+# Install dependencies
+composer install && npm install
 
-## Laravel Sponsors
+# Set up environment
+cp .env.example .env
+php artisan key:generate
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+# Run migrations
+php artisan migrate
 
-### Premium Partners
+# Start the development server
+composer run dev
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## CLI Commands
 
-## Contributing
+### Feed Management
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+php artisan rss:feed:add {url}          # Subscribe to a feed by URL (auto-detects RSS/Atom)
+php artisan rss:feed:remove {feed}      # Unsubscribe from a feed
+php artisan rss:feed:list               # List all subscribed feeds
+php artisan rss:feed:info {feed}        # Show feed details
+php artisan rss:feed:health             # Show disabled/unhealthy feeds
+php artisan rss:feed:enable {feed}      # Re-enable a disabled feed
+```
 
-## Code of Conduct
+### Folder Management
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+php artisan rss:folder:create {name}    # Create a folder
+php artisan rss:folder:delete {folder}  # Delete a folder (feeds moved to uncategorized)
+php artisan rss:folder:list             # List all folders with feed counts
+php artisan rss:folder:move {feed} {folder}  # Move a feed into a folder
+```
 
-## Security Vulnerabilities
+### Fetching
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+php artisan rss:fetch                   # Fetch all enabled feeds
+php artisan rss:fetch {feed}            # Fetch a single feed
+```
+
+Scheduled automatically every 4 hours via the Laravel scheduler.
+
+### OPML Import/Export
+
+```bash
+php artisan rss:opml:import {file}      # Import feeds from an OPML file
+php artisan rss:opml:export {file}      # Export subscriptions as OPML
+```
+
+## Project Structure
+
+```
+app/
+├── Console/Commands/   # 13 Artisan commands (rss:feed:*, rss:folder:*, rss:fetch, rss:opml:*)
+├── Http/Controllers/   # Web controllers for the reading interface
+├── Models/             # Feed, Article, Folder (Eloquent models)
+├── Services/           # FeedParser, OpmlParser
+resources/
+├── views/              # Blade templates (articles, components)
+├── js/                 # SPA navigation, read state, PWA service worker
+public/                 # PWA manifest and icons
+database/
+├── migrations/         # Folders, feeds, articles tables + health columns
+```
+
+## Testing
+
+```bash
+php artisan test --compact
+```
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+MIT
