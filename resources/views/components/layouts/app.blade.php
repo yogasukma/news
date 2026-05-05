@@ -9,15 +9,20 @@
 
     <title>{{ $title ?? 'RSS Reader' }}</title>
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/spa.js'])
 </head>
 <body class="bg-stone-50 text-stone-900 antialiased min-h-screen">
+    {{-- SPA Loading Bar --}}
+    <div id="spa-loading" class="fixed top-0 left-0 w-full h-0.5 z-[60] pointer-events-none opacity-0 transition-opacity duration-200">
+        <div class="h-full bg-stone-900 animate-spa-progress" style="width: 0%"></div>
+    </div>
+
     <header class="border-b border-stone-200 bg-white sticky top-0 z-30">
         <div class="max-w-2xl mx-auto px-4 py-4 flex items-center justify-between gap-4">
             <a href="/" class="text-xl font-semibold tracking-tight text-stone-900 hover:text-stone-600 transition-colors shrink-0">
                 RSS Reader
             </a>
-            <form action="{{ route('search') }}" method="GET" class="flex-1 max-w-xs">
+            <form action="{{ route('search') }}" method="GET" data-spa-search class="flex-1 max-w-xs">
                 <input type="search"
                        name="q"
                        value="{{ request('q') }}"

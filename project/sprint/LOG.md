@@ -5,3 +5,4 @@
 | 001 | core-reader | Completed | 2026-05-04 | 2026-05-04 | 12 | 47 |
 | 002 | opml-and-cli-tests | Completed | 2026-05-04 | 2026-05-04 | 9 | 23 |
 | 003 | pwa-and-search | Completed | 2026-05-04 | 2026-05-04 | 4 | 13 |
+| 004 | ui-ux-polish | In Progress | 2026-05-05 | - | 3 | 12 |

@@ -37,4 +37,27 @@ class Feed extends Model
     {
         return $this->hasMany(Article::class);
     }
+
+    /**
+     * Get the favicon URL for this feed.
+     * Uses stored favicon_url, or falls back to Google's favicon service.
+     */
+    public function getFaviconUrlAttribute(): string
+    {
+        if ($this->attributes['favicon_url'] ?? null) {
+            return $this->attributes['favicon_url'];
+        }
+
+        $siteUrl = $this->attributes['site_url'] ?? null;
+
+        if ($siteUrl) {
+            $domain = parse_url($siteUrl, PHP_URL_HOST);
+
+            if ($domain) {
+                return 'https://www.google.com/s2/favicons?domain='.$domain.'&sz=32';
+            }
+        }
+
+        return '';
+    }
 }

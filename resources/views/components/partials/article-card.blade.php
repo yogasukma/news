@@ -1,6 +1,6 @@
 @props(['article'])
 
-<article class="bg-white rounded-lg border border-stone-200 overflow-hidden hover:border-stone-300 transition-colors group cursor-pointer"
+<article class="bg-white rounded-lg border border-stone-200 overflow-hidden hover:border-stone-400 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 ease-out group cursor-pointer"
          onclick="openArticle({{ $article->id }})"
          role="button"
          tabindex="0"
@@ -22,6 +22,13 @@
         </h2>
 
         <div class="flex items-center gap-2 mt-2 text-sm text-stone-500">
+            @if ($article->feed->favicon_url)
+                <img src="{{ $article->feed->favicon_url }}"
+                     alt=""
+                     class="w-4 h-4 rounded-sm shrink-0"
+                     loading="lazy"
+                     onerror="this.style.display='none'">
+            @endif
             <span class="font-medium text-stone-600">{{ $article->feed->title }}</span>
             @if ($article->feed->folder)
                 <span class="text-stone-300">·</span>
