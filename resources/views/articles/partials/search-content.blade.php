@@ -39,7 +39,7 @@
 @elseif ($articles->isNotEmpty())
     <div class="space-y-4">
         @foreach ($articles as $article)
-            <x-partials.article-card :article="$article" />
+            <x-partials.article-card :article="$article" :mode="'recent'" />
         @endforeach
     </div>
 

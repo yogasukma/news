@@ -98,6 +98,7 @@
 - **Key features**:
   - Full-text search across article titles and content
   - Display search results with relevance
+  - Article cards show date+time (since results span multiple dates)
 - **Priority**: Nice-to-have
 
 ### Module 7: UI/UX Polish
