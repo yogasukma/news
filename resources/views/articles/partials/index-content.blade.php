@@ -77,7 +77,7 @@
 {{-- Article List --}}
 @if ($articles->isEmpty())
     <div class="text-center py-16">
-        <p class="text-stone-400 text-lg">No articles on this date.</p>
+        <p class="text-stone-400 text-lg">{{ $mode === 'recent' ? 'No articles found.' : 'No articles on this date.' }}</p>
     </div>
 @else
     <div class="space-y-4">

@@ -30,8 +30,9 @@ class ArticleController extends Controller
             ->orderByDesc('published_at')
             ->get();
 
-        // Fallback to recent feeds when today has fewer than 20 articles
-        if ($date->isToday() && $articles->count() < 20) {
+        if (! $date->isToday()) {
+            $mode = 'date';
+        } elseif ($articles->count() < 20) {
             $mode = 'recent';
 
             $articles = Article::query()
@@ -40,10 +41,6 @@ class ArticleController extends Controller
                 ->orderByDesc('published_at')
                 ->limit(20)
                 ->get();
-        }
-
-        if (! $date->isToday()) {
-            $mode = 'date';
         }
 
         $folders = Folder::orderBy('name')->get();

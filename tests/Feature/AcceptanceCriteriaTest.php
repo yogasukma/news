@@ -400,7 +400,7 @@ describe('US-015: Today\'s feeds homepage', function () {
     it('AC2: shows empty state when no articles today', function () {
         $this->get('/')
             ->assertSuccessful()
-            ->assertSee('No articles on this date');
+            ->assertSee('No articles found');
     });
 
     it('AC3: article cards show title, feed name, published time, and excerpt', function () {

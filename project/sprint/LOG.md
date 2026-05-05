@@ -8,3 +8,4 @@
 | 004 | ui-ux-polish | Completed | 2026-05-05 | 2026-05-05 | 3 | 12 |
 | 005 | fetch-health | Completed | 2026-05-05 | 2026-05-05 | 4 | 14 |
 | 006 | read-state-images | Completed | 2026-05-05 | 2026-05-05 | 2 | 5 |
+| 007 | recent-feeds-fallback | In Progress | 2026-05-05 | - | 2 | 7 |

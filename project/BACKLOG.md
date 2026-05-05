@@ -1,12 +1,12 @@
 # Product Backlog
 
 ## Summary
-- Total stories: 34
+- Total stories: 36
 - Delivered: 34 (Sprint 001: 12, Sprint 002: 9, Sprint 003: 4, Sprint 004: 3, Sprint 005: 4, Sprint 006: 2)
-- Remaining: 0
-- Total story points: 130
+- Remaining: 2
+- Total story points: 137
 - Delivered points: 130
-- Remaining points: 0
+- Remaining points: 7
 
 ---
 
@@ -417,3 +417,33 @@
 - **Acceptance Criteria**:
   - [ ] Given an article with images in its content, When displayed in the modal, Then all images have border-radius applied
   - [ ] Given images in the modal, When rendered, Then the rounding is consistent and not overly dramatic
+
+---
+
+## Module: Smart Recent Feeds
+
+### US-035: Smart homepage — Recent Feeds fallback when today has few articles
+- **As a** public visitor, **I want** the homepage to always show a meaningful list of articles, **so that** the page doesn't feel empty on days with few or no new posts.
+- **Priority**: P1
+- **Points**: 5
+- **Dependencies**: US-015
+- **Status**: Pending
+- **Acceptance Criteria**:
+  - [ ] Given today has 20 or more articles, When I visit the homepage, Then the page title shows "Today's Feeds" and only today's articles are displayed (existing behavior unchanged)
+  - [ ] Given today has fewer than 20 articles, When I visit the homepage, Then the page title shows "Recent Feeds" and the 20 most recent articles are displayed (regardless of date)
+  - [ ] Given "Recent Feeds" mode is active, When a folder filter is applied, Then only articles from feeds in that folder are shown (up to 20, still ordered by recency)
+  - [ ] Given I navigate to a specific past date via date navigation, When the page loads, Then the current date-scoped behavior applies (no "Recent Feeds" fallback, only that date's articles)
+  - [ ] Given "Recent Feeds" mode, When the article count is displayed, Then it reflects the actual number of articles shown
+  - [ ] Given the SPA fetches the homepage fragment, When today has < 20 articles, Then the fragment returns "Recent Feeds" mode with 20 recent articles
+
+### US-036: Show date and time on article cards in Recent Feeds mode
+- **As a** public visitor, **I want** article cards to show both date and time when viewing "Recent Feeds", **so that** I can tell which articles are from today versus previous days.
+- **Priority**: P1
+- **Points**: 2
+- **Dependencies**: US-035
+- **Status**: Pending
+- **Acceptance Criteria**:
+  - [ ] Given "Today's Feeds" mode is active, When article cards are rendered, Then only the time is shown (existing behavior — e.g., "3:45 PM")
+  - [ ] Given "Recent Feeds" mode is active, When article cards are rendered, Then both date and time are shown (e.g., "May 4, 3:45 PM")
+  - [ ] Given "Recent Feeds" mode, When an article is from today, Then today's date is still shown alongside the time for consistency
+  - [ ] Given a past date is navigated to (not today), When article cards are rendered, Then only the time is shown (existing behavior unchanged)
