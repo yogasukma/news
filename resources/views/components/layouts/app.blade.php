@@ -9,7 +9,7 @@
 
     <title>{{ $title ?? 'RSS Reader' }}</title>
 
-    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/spa.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/spa.js', 'resources/js/read-state.js'])
 </head>
 <body class="bg-stone-50 text-stone-900 antialiased min-h-screen">
     {{-- SPA Loading Bar --}}
