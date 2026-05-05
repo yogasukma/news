@@ -8,4 +8,4 @@
 - [x] Phase 6: Code Review
 - [x] Phase 7: Testing
 - [x] Phase 8: Sprint Review
-- [ ] Phase 9: Retrospective
+- [x] Phase 9: Retrospective
