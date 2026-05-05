@@ -2,11 +2,11 @@
 
 ## Summary
 - Total stories: 37
-- Delivered: 36 (Sprint 001: 12, Sprint 002: 9, Sprint 003: 4, Sprint 004: 3, Sprint 005: 4, Sprint 006: 2, Sprint 007: 2)
-- Remaining: 1
+- Delivered: 37 (Sprint 001: 12, Sprint 002: 9, Sprint 003: 4, Sprint 004: 3, Sprint 005: 4, Sprint 006: 2, Sprint 007: 2, Sprint 008: 1)
+- Remaining: 0
 - Total story points: 139
-- Delivered points: 137
-- Remaining points: 2
+- Delivered points: 139
+- Remaining points: 0
 
 ---
 
@@ -452,12 +452,12 @@
 
 ## Module: Search Results Date Display
 
-### US-037: Show date+time on article cards in search results
+### US-037: [DELIVERED] Show date+time on article cards in search results
 - **As a** public visitor, **I want** article cards in search results to show both date and time, **so that** I can tell which articles are recent when results span multiple dates.
 - **Priority**: P2
 - **Points**: 2
 - **Dependencies**: US-024, US-036
-- **Status**: Pending
+- **Status**: Delivered in Sprint 008
 - **Acceptance Criteria**:
   - [ ] Given search results spanning multiple dates, When article cards are rendered, Then both date and time are shown (e.g., "May 4, 3:45 PM")
   - [ ] Given search results from a single date, When article cards are rendered, Then both date and time are still shown for consistency
