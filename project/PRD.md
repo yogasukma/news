@@ -139,6 +139,7 @@
   - **Date+time display**: In "Recent Feeds" mode, article cards show both the date and time (not just time), since articles span multiple days
   - **Only applies to homepage**: When navigating to a specific past date, the current date-scoped behavior remains unchanged
   - **Folder filter works**: The folder filter still applies within the "Recent Feeds" result set
+  - **Date navigation available**: Date picker and prev/next links are visible in "Recent Feeds" mode; navigating to a date switches to that date's articles
 - **Priority**: Must-have
 
 ## 5. Non-Functional Requirements
