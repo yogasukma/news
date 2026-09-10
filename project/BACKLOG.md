@@ -1,12 +1,12 @@
 # Product Backlog
 
 ## Summary
-- Total stories: 46
-- Delivered: 46 (Sprint 001: 12, Sprint 002: 9, Sprint 003: 4, Sprint 004: 3, Sprint 005: 4, Sprint 006: 2, Sprint 007: 2, Sprint 008: 1, Sprint 009: 2, Sprint 010: 4, Sprint 011: 3)
-- Remaining: 0
-- Total story points: 166
+- Total stories: 48
+- Delivered: 46 (Sprints 001–011, see Sprint Log)
+- Remaining: 2 (Sprint 011 addition: 2 stories, 4 points)
+- Total story points: 170
 - Delivered points: 166
-- Remaining points: 0
+- Remaining points: 4
 
 ---
 
@@ -594,3 +594,25 @@
   - [ ] Given an article card, When I click it, Then the article opens in the existing reading modal
   - [ ] Given a source with no articles, When I visit its detail page, Then an empty state message is shown
   - [ ] Given the SPA fetches the detail page fragment (`?fragment=1`), Then the header and list render without a full page reload
+
+### US-047: Link icon next to the site URL on the source detail page
+- **As a** public visitor, **I want** the source detail header's site URL to carry a small external-link icon, **so that** it's visually clear the URL opens the site externally.
+- **Priority**: P2
+- **Points**: 1
+- **Dependencies**: US-045
+- **Status**: In Sprint 011
+- **Acceptance Criteria**:
+  - [ ] Given a source with a valid site_url, When the detail page header renders, Then an external-link SVG icon appears next to the site URL
+  - [ ] Given the icon, Then it is inside the same new-tab link (icon + URL are one anchor)
+
+### US-048: Source names link to the source detail page across the app
+- **As a** public visitor, **I want** every source name shown with an article to link to that source's detail page, **so that** I can jump from any article to the full source.
+- **Priority**: P1
+- **Points**: 3
+- **Dependencies**: US-045
+- **Status**: In Sprint 011
+- **Acceptance Criteria**:
+  - [ ] Given an article card (homepage, date pages, search results, source detail list), When it renders, Then the feed name links to `/sources/{feed-id}` with `data-spa`
+  - [ ] Given a feed name link inside an article card, When clicked, Then the article modal does NOT open (guard prevents the card's modal handler)
+  - [ ] Given an article modal, When it opens, Then the feed name in the modal header is a link to `/sources/{feed-id}`
+  - [ ] Given the modal feed link, When clicked, Then the modal closes and navigation to the source page happens

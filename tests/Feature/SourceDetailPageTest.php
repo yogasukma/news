@@ -128,9 +128,11 @@ describe('US-046: source detail page paginated article list', function () {
         $feed = Feed::factory()->create();
         $article = Article::factory()->create(['feed_id' => $feed->id]);
 
+        // Card opens the modal via openArticle(), guarded so inner links (e.g. feed name) don't trigger it
         $this->get(route('sources.show', $feed))
             ->assertSuccessful()
-            ->assertSee('onclick="openArticle('.$article->id.')"', false);
+            ->assertSee('openArticle('.$article->id.')', false)
+            ->assertSee("if (!event.target.closest('a')) openArticle", false);
     });
 
     it('shows an empty state when the source has no articles', function () {
@@ -141,6 +143,26 @@ describe('US-046: source detail page paginated article list', function () {
             ->assertSee('No articles yet.');
     });
 
+    it('shows a link icon next to the site URL in the header', function () {
+        $feed = Feed::factory()->create([
+            'title' => 'Iconed Blog',
+            'site_url' => 'https://example.com/blog',
+        ]);
+
+        $content = $this->get(route('sources.show', $feed))->assertSuccessful()->getContent();
+
+        // The external-link SVG icon lives inside the site-URL anchor
+        $hrefPos = strpos($content, 'href="https://example.com/blog"');
+        $svgPos = strpos($content, '<svg class="w-3.5 h-3.5');
+        $urlTextPos = strpos($content, 'example.com/blog</span>');
+
+        expect($hrefPos)->not->toBe(false);
+        expect($svgPos)->not->toBe(false);
+        expect($urlTextPos)->not->toBe(false);
+        expect($hrefPos)->toBeLessThan($svgPos);
+        expect($svgPos)->toBeLessThan($urlTextPos);
+    });
+
     it('shows the article count in the header', function () {
         $feed = Feed::factory()->create();
         Article::factory()->count(3)->create(['feed_id' => $feed->id]);
@@ -148,5 +170,30 @@ describe('US-046: source detail page paginated article list', function () {
         $this->get(route('sources.show', $feed))
             ->assertSuccessful()
             ->assertSee('3 articles');
+    });
+});
+
+describe('US-048: source names link to the source detail page across the app', function () {
+    it('links the feed name on article cards to the source page via SPA', function () {
+        $feed = Feed::factory()->create(['title' => 'Card Source']);
+        Article::factory()->today()->create(['feed_id' => $feed->id]);
+
+        $content = $this->get('/')->assertSuccessful()->getContent();
+
+        // Feed name is an internal data-spa link to the source detail page
+        expect($content)->toContain('href="'.route('sources.show', $feed).'"');
+        expect($content)->toContain('data-spa');
+        // The card's modal handler is guarded — clicking the feed link must not open the modal
+        expect($content)->toContain("if (!event.target.closest('a')) openArticle", false);
+    });
+
+    it('builds the modal feed name as a link to the source page in app.js', function () {
+        $source = file_get_contents(base_path('resources/js/app.js'));
+
+        expect($source)->toContain('`/sources/${article.feed.id}`');
+        expect($source)->toContain("feedLink.dataset.spa = ''");
+        expect($source)->toContain("feedLink.addEventListener('click', closeModal)");
+        // Feed title is inserted as text, never raw HTML (XSS-safe)
+        expect($source)->toContain('document.createTextNode(article.feed.title)');
     });
 });

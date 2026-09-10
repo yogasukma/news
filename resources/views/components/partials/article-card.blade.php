@@ -5,11 +5,11 @@
 
 <article class="bg-white rounded-lg border border-stone-200 overflow-hidden hover:border-stone-400 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 ease-out group cursor-pointer"
          data-article-id="{{ $article->id }}"
-         onclick="openArticle({{ $article->id }})"
+         onclick="if (!event.target.closest('a')) openArticle({{ $article->id }})"
          role="button"
          tabindex="0"
          aria-label="Read: {{ $article->title }}"
-         onkeydown="if(event.key==='Enter') openArticle({{ $article->id }})">
+         onkeydown="if(event.key==='Enter' && !event.target.closest('a')) openArticle({{ $article->id }})">
 
     @if ($article->cover_image)
         <div class="aspect-[2/1] overflow-hidden bg-stone-100">
@@ -26,14 +26,18 @@
         </h2>
 
         <div class="flex items-center gap-2 mt-2 text-sm text-stone-500">
-            @if ($article->feed->favicon_url)
-                <img src="{{ $article->feed->favicon_url }}"
-                     alt=""
-                     class="w-4 h-4 rounded-sm shrink-0"
-                     loading="lazy"
-                     onerror="this.style.display='none'">
-            @endif
-            <span class="font-medium text-stone-600">{{ $article->feed->title }}</span>
+            <a href="{{ route('sources.show', $article->feed) }}"
+               data-spa
+               class="flex items-center gap-1.5 min-w-0 hover:text-stone-900 hover:underline transition-colors">
+                @if ($article->feed->favicon_url)
+                    <img src="{{ $article->feed->favicon_url }}"
+                         alt=""
+                         class="w-4 h-4 rounded-sm shrink-0"
+                         loading="lazy"
+                         onerror="this.style.display='none'">
+                @endif
+                <span class="font-medium text-stone-600">{{ $article->feed->title }}</span>
+            </a>
             @if ($article->feed->folder)
                 <span class="text-stone-300">·</span>
                 <span>{{ $article->feed->folder->name }}</span>

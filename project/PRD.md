@@ -194,12 +194,13 @@
 - **Key features**:
   - New route `GET /sources/{feed}` (route-model binding on feed id); non-existent ids return 404
   - Sources list rows now navigate to the detail page (internal, SPA-compatible) instead of opening the external site in a new tab
-  - Header follows the article page design: favicon + site title, plus a clickable URL of the source site (opens the external site in a new tab with `rel="noopener noreferrer"`)
+  - Header follows the article page design: favicon + site title, plus a clickable URL of the source site (opens the external site in a new tab with `rel="noopener noreferrer"`) with a small external-link icon
   - Below the header: the list of articles for that source, newest first
   - Article list is **paginated** (matching the search page pattern, e.g., 30 per page) since a single source can have many articles
   - Article cards show date+time (articles span multiple days) and clicking an article opens it in the existing modal
   - SPA-compatible: supports `?fragment=1` content swapping like all other pages
   - Sources without a valid site URL show the favicon + title header without the clickable external link
+  - **Source names link to their detail page everywhere**: article cards (homepage, date pages, search results, source detail list) and the article modal header link to `/sources/{feed}`
 - **Priority**: Must-have
 
 ## 5. Non-Functional Requirements
