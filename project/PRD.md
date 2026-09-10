@@ -175,7 +175,7 @@
   - Page title: "RSS Sources", with a "Back to feeds" link at the top returning to the article page (SPA-compatible)
   - Lists every feed in the system — not filtered by the currently selected date
   - Each row shows: favicon + feed name on the left, last fetched time on the right (TOC-style: name left-aligned, time right-aligned)
-  - Each source row links to the source site's homepage (site_url), opening in a new tab (`target="_blank"` + `rel="noopener noreferrer"`); sources without a valid site homepage render as plain, non-clickable text
+  - Each source row links to the **source detail page** (`/sources/{feed}`) via internal navigation (SPA-compatible); sources without a favicon still link to their detail page
   - Sorted by most recently fetched first (descending `last_fetched_at`)
   - Feeds with no fetch history appear at the bottom
   - SPA-compatible: works with fragment navigation like the other pages
@@ -187,6 +187,19 @@
   - Click anywhere OUTSIDE the modal content (the dark backdrop area of the full screen) to close the modal — including the scrollable area around the content
   - All links inside the modal content body open in a new tab (`target="_blank"` with `rel="noopener noreferrer"`)
   - Images inside the modal content always render at `width: 100%`, `max-width: 100%`, `height: auto` (responsive, never overflow)
+- **Priority**: Must-have
+
+### Module 15: Source Detail Page
+- **Description**: A per-source page showing all articles published by a single feed, addressed by the feed's numeric id (`/sources/{id}`). Replaces the previous "open source site in new tab" behavior from the sources directory.
+- **Key features**:
+  - New route `GET /sources/{feed}` (route-model binding on feed id); non-existent ids return 404
+  - Sources list rows now navigate to the detail page (internal, SPA-compatible) instead of opening the external site in a new tab
+  - Header follows the article page design: favicon + site title, plus a clickable URL of the source site (opens the external site in a new tab with `rel="noopener noreferrer"`)
+  - Below the header: the list of articles for that source, newest first
+  - Article list is **paginated** (matching the search page pattern, e.g., 30 per page) since a single source can have many articles
+  - Article cards show date+time (articles span multiple days) and clicking an article opens it in the existing modal
+  - SPA-compatible: supports `?fragment=1` content swapping like all other pages
+  - Sources without a valid site URL show the favicon + title header without the clickable external link
 - **Priority**: Must-have
 
 ## 5. Non-Functional Requirements

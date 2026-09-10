@@ -1,12 +1,12 @@
 # Product Backlog
 
 ## Summary
-- Total stories: 43
+- Total stories: 46
 - Delivered: 43 (Sprint 001: 12, Sprint 002: 9, Sprint 003: 4, Sprint 004: 3, Sprint 005: 4, Sprint 006: 2, Sprint 007: 2, Sprint 008: 1, Sprint 009: 2, Sprint 010: 4)
-- Remaining: 0
-- Total story points: 156
+- Remaining: 3 (Sprint 011: 3 stories, 10 points)
+- Total story points: 166
 - Delivered points: 156
-- Remaining points: 0
+- Remaining points: 10
 
 ---
 
@@ -550,3 +550,44 @@
   - [ ] Given an image in the modal content, When rendered, Then its width is 100% and max-width is 100%
   - [ ] Given an image in the modal content, When rendered, Then its height is auto and the aspect ratio is preserved
   - [ ] Given an image in the modal content, When rendered, Then the existing border-radius styling is preserved
+
+---
+
+## Module: Source Detail Page
+
+### US-044: Sources list rows navigate to source detail page
+- **As a** public visitor, **I want** to click any source on the sources page and be taken to that source's detail page, **so that** I can browse all news from a single source without leaving the app.
+- **Priority**: P0
+- **Points**: 2
+- **Dependencies**: US-040
+- **Acceptance Criteria**:
+  - [ ] Given a source row on the sources page, When I click it, Then the browser navigates to `/sources/{feed-id}` (internal navigation, no new tab)
+  - [ ] Given a source row, When the link is rendered, Then it is SPA-compatible (`data-spa`) so the page swaps without a full reload
+  - [ ] Given a source without a valid site_url, When its row is rendered, Then it is still clickable and links to its detail page (replaces the old non-clickable plain-text behavior)
+  - [ ] Given a source row, When rendered, Then it no longer contains a `target="_blank"` external link (the old new-tab behavior is removed)
+
+### US-045: Source detail page — route, header, and not-found handling
+- **As a** public visitor, **I want** to visit `/sources/{id}` and see a header identifying the source, **so that** I know which source I'm viewing.
+- **Priority**: P0
+- **Points**: 3
+- **Dependencies**: US-044
+- **Acceptance Criteria**:
+  - [ ] Given a valid feed id, When I visit `/sources/{id}`, Then the page renders with HTTP 200
+  - [ ] Given a non-existent feed id, When I visit `/sources/{id}`, Then a 404 response is returned
+  - [ ] Given the source detail page, Then its header shows the feed's favicon and site title
+  - [ ] Given the feed has a valid site_url, When I click the site URL in the header, Then the external site opens in a new tab with `rel="noopener noreferrer"`
+  - [ ] Given a feed without a valid site_url, When the header renders, Then the title and favicon show without any external link
+  - [ ] Given the source detail page, Then a link to return to the sources list is available
+
+### US-046: Source detail page — paginated article list with modal
+- **As a** public visitor, **I want** to see all articles from a source on its detail page, **so that** I can catch up on everything that source has published.
+- **Priority**: P0
+- **Points**: 5
+- **Dependencies**: US-045
+- **Acceptance Criteria**:
+  - [ ] Given a source with articles, When I visit its detail page, Then its articles are listed newest first
+  - [ ] Given a source with more than 30 articles, When the list is rendered, Then it is paginated (30 per page) with pagination controls
+  - [ ] Given article cards on the detail page, When rendered, Then they show both date and time (e.g., "May 4, 3:45 PM")
+  - [ ] Given an article card, When I click it, Then the article opens in the existing reading modal
+  - [ ] Given a source with no articles, When I visit its detail page, Then an empty state message is shown
+  - [ ] Given the SPA fetches the detail page fragment (`?fragment=1`), Then the header and list render without a full page reload
