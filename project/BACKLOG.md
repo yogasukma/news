@@ -2,11 +2,11 @@
 
 ## Summary
 - Total stories: 43
-- Delivered: 37 (Sprint 001: 12, Sprint 002: 9, Sprint 003: 4, Sprint 004: 3, Sprint 005: 4, Sprint 006: 2, Sprint 007: 2, Sprint 008: 1)
-- Remaining: 6
+- Delivered: 39 (Sprint 001: 12, Sprint 002: 9, Sprint 003: 4, Sprint 004: 3, Sprint 005: 4, Sprint 006: 2, Sprint 007: 2, Sprint 008: 1, Sprint 009: 2)
+- Remaining: 4
 - Total story points: 156
 - Delivered points: 139
-- Remaining points: 17
+- Remaining points: 9
 
 ---
 
@@ -467,11 +467,12 @@
 
 ## Module: Fetch Deduplication
 
-### US-038: [PENDING] Global duplicate prevention by article URL
+### US-038: [DELIVERED] Global duplicate prevention by article URL
 - **As a** site owner, **I want** the fetcher to check the article's URL/permalink against all stored articles before saving, **so that** no article is ever stored twice, regardless of which feed it came from.
 - **Priority**: P0
 - **Points**: 5
 - **Dependencies**: US-009, US-010
+- **Status**: Delivered in Sprint 009
 - **Acceptance Criteria**:
   - [ ] Given an article URL already stored in the same feed, When fetched again, Then the existing article is updated (title, content, author, cover image) and no duplicate is created
   - [ ] Given an article URL already stored from a DIFFERENT feed, When fetched, Then the existing article is updated and no duplicate is created
@@ -479,11 +480,12 @@
   - [ ] Given a URL that differs only by tracking parameters (e.g., `?utm_source=...`), When fetched, Then it is treated as the same article and not duplicated
   - [ ] Given the external_id/guid exists, When the same article arrives with a missing or changed guid, Then the URL check still prevents duplication
 
-### US-039: [PENDING] Re-enable disabled feeds after one month of inactivity
+### US-039: [DELIVERED] Re-enable disabled feeds after one month of inactivity
 - **As a** site owner, **I want** disabled feeds to be automatically re-enabled after a month without updates, **so that** temporarily-down sources recover without manual intervention.
 - **Priority**: P1
 - **Points**: 3
 - **Dependencies**: US-031
+- **Status**: Delivered in Sprint 009
 - **Acceptance Criteria**:
   - [ ] Given a disabled feed whose `updated_at` is more than 1 month old, When `rss:feed:recover` runs, Then `error_count` is reset to 0 and the feed is re-enabled (`is_enabled = true`)
   - [ ] Given a disabled feed whose `updated_at` is less than 1 month old, When the command runs, Then the feed remains disabled
