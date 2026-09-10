@@ -1,7 +1,7 @@
 # Sprint 009: data-integrity
 
 ## Sprint Goal
-Reinforce backend data integrity: prevent duplicate articles by URL, auto-reactivate stale disabled feeds, and surface source freshness on a new Sources page.
+Reinforce backend data integrity: prevent duplicate articles by URL and auto-reactivate stale disabled feeds.
 
 ## Duration
 2026-09-10 → 2026-09-10
@@ -11,11 +11,10 @@ Reinforce backend data integrity: prevent duplicate articles by URL, auto-reacti
 |-------|-------|--------|----------|
 | US-038 | Global duplicate prevention by article URL | 5 | P0 |
 | US-039 | Re-enable disabled feeds after one month of inactivity | 3 | P1 |
-| US-040 | Sources page listing all feeds with last fetch time | 5 | P1 |
 
 ## Sprint Capacity
-- Total story points: 13
-- Number of stories: 3
+- Total story points: 8
+- Number of stories: 2
 
 ---
 
@@ -36,12 +35,3 @@ Reinforce backend data integrity: prevent duplicate articles by URL, auto-reacti
 - [ ] Task 4: Register `rss:feed:recover` in `routes/console.php` scheduler to run daily
 - [ ] Task 5: Write Pest tests covering: stale disabled feed recovered, recent disabled feed untouched, enabled feed untouched, and summary output
 - [ ] Task 6: Run `vendor/bin/pint --dirty --format agent` on modified PHP files
-
-### US-040: Sources page listing all feeds with last fetch time
-- [ ] Task 1: Create `app/Http/Controllers/SourcesController.php` with an `index()` action returning all feeds (with folder) ordered by `last_fetched_at` descending, nulls last; support `?fragment=1`
-- [ ] Task 2: Add `Route::get('/sources', [SourcesController::class, 'index'])->name('sources')` to `routes/web.php`
-- [ ] Task 3: Create `resources/views/sources/index.blade.php` full page using `<x-layouts.app>`
-- [ ] Task 4: Create `resources/views/sources/partials/index-content.blade.php` fragment: TOC-style rows (favicon + feed name left, last fetched time right), never-fetched feeds at the bottom
-- [ ] Task 5: Add the "Sources" link after the date picker in `articles/partials/index-content.blade.php` with a separator and `data-spa`
-- [ ] Task 6: Write Pest feature tests covering: route renders, all feeds listed (not date-scoped), sort order (recent fetch first), never-fetched at bottom, and fragment response
-- [ ] Task 7: Run `vendor/bin/pint --dirty --format agent` on modified PHP files
