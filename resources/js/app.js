@@ -6,7 +6,6 @@ const modalMeta = document.getElementById('modal-meta');
 const modalBody = document.getElementById('modal-body');
 const modalOriginalLink = document.getElementById('modal-original-link');
 const modalClose = document.getElementById('modal-close');
-const modalBackdrop = document.getElementById('modal-backdrop');
 
 window.openArticle = async function (id) {
     try {
@@ -37,6 +36,13 @@ window.openArticle = async function (id) {
         );
         modalMeta.appendChild(metaText);
         modalBody.innerHTML = article.content || '<p class="text-stone-400">No content available.</p>';
+
+        // Open every link inside the article content in a new tab
+        modalBody.querySelectorAll('a').forEach((a) => {
+            a.target = '_blank';
+            a.rel = 'noopener noreferrer';
+        });
+
         modalOriginalLink.href = article.url;
 
         modal.classList.remove('hidden');
@@ -59,7 +65,18 @@ function closeModal() {
 }
 
 modalClose.addEventListener('click', closeModal);
-modalBackdrop.addEventListener('click', closeModal);
+
+// Close when clicking anywhere outside the modal content
+// (the backdrop and the scrollable area around the white card).
+// The overlay wrapper covers the full viewport above the backdrop,
+// so this single delegated listener handles both cases.
+document.getElementById('modal-overlay').addEventListener('click', (e) => {
+    if (e.target.closest('#modal-content') || e.target.closest('#modal-close')) {
+        return;
+    }
+
+    closeModal();
+});
 
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && !modal.classList.contains('hidden')) {

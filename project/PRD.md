@@ -172,10 +172,12 @@
 - **Description**: A public page listing ALL subscribed sources (regardless of date) with their last fetch time, styled like a table of contents for quick scanning.
 - **Key features**:
   - New route/page (e.g., `/sources`) accessible from a "Sources" link placed after the date picker (separated by a divider) on the article page
+  - Page title: "RSS Sources", with a "Back to feeds" link at the top returning to the article page (SPA-compatible)
   - Lists every feed in the system — not filtered by the currently selected date
   - Each row shows: favicon + feed name on the left, last fetched time on the right (TOC-style: name left-aligned, time right-aligned)
+  - Each source row links to the source site's homepage (site_url), opening in a new tab (`target="_blank"` + `rel="noopener noreferrer"`); sources without a valid site homepage render as plain, non-clickable text
   - Sorted by most recently fetched first (descending `last_fetched_at`)
-  - Sets with no fetch history appear at the bottom
+  - Feeds with no fetch history appear at the bottom
   - SPA-compatible: works with fragment navigation like the other pages
 - **Priority**: Must-have
 
