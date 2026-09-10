@@ -62,13 +62,13 @@ describe('US-035: smart homepage — recent feeds fallback', function () {
             ->assertSee('May 3, 2026');
     });
 
-    it('hides date navigation in recent mode', function () {
+    it('shows date navigation in recent mode', function () {
         $feed = Feed::factory()->create();
         Article::factory()->count(5)->today()->create(['feed_id' => $feed->id]);
 
         $this->get('/')
             ->assertSuccessful()
-            ->assertDontSee('data-spa-date');
+            ->assertSee('data-spa-date', false);
     });
 
     it('shows date navigation in today mode', function () {
