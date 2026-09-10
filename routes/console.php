@@ -9,3 +9,4 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 Schedule::command('rss:fetch')->everyFourHours()->withoutOverlapping();
+Schedule::command('rss:feed:recover')->daily();

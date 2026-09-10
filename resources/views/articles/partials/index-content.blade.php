@@ -51,6 +51,14 @@
                    class="text-sm border border-stone-200 rounded px-2 py-1 text-stone-600 bg-white hover:border-stone-300 transition-colors"
                    data-spa-date>
         </label>
+
+        <span class="text-stone-300">|</span>
+
+        <a href="{{ route('sources') }}"
+           class="inline-flex items-center gap-1 text-sm text-stone-600 hover:text-stone-900 transition-colors px-2 py-1 rounded hover:bg-stone-100"
+           data-spa>
+            Sources
+        </a>
     </div>
 
     {{-- Folder Filter --}}

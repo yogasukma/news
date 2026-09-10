@@ -25,12 +25,16 @@
   - Reliable feed fetching and article storage
   - Simple CLI-based feed management for the owner
   - Accessible from mobile and desktop via PWA
+  - A clean, duplication-free article stream and a healthy feed ecosystem (broken feeds recover automatically)
 - **Success metrics**:
   - Successfully subscribes to and fetches articles from RSS/Atom feeds
   - Article content renders cleanly and readably for public visitors
   - OPML import/export works with standard formats
   - PWA installs and works on both desktop and mobile browsers
   - CLI commands provide clear output and error handling
+  - Zero duplicate articles in the stream, verified by URL/permalink regardless of source feed
+  - Disabled feeds automatically recover after one month of inactivity without manual intervention
+  - Visitors can see all sources and their last fetch times
 
 ## 4. Feature Modules
 
@@ -53,6 +57,7 @@
 - **Key features**:
   - Parse RSS 2.0 and Atom feed formats
   - Store articles with title, URL, content, author, published date, and cover image
+  - **Global duplicate prevention** — before saving, check the article's URL/permalink against ALL stored articles; skip (or update) instead of creating a duplicate
   - `rss:fetch` — Fetch all feeds (run via scheduler, e.g., every hour)
   - `rss:fetch {feed}` — Fetch a single feed
   - Handle feed errors gracefully (invalid XML, timeouts, dead feeds)
@@ -120,6 +125,7 @@
   - Auto-disable feeds after 8 consecutive errors
   - Clear error count on successful fetch
   - CLI command to list/reenable disabled feeds
+  - **Automatic recovery** — a dedicated scheduled command re-enables feeds that have been disabled for over a month (resets error counter)
 - **Priority**: Must-have
 
 ### Module 9: Read State & Image Styling
@@ -140,6 +146,47 @@
   - **Only applies to homepage**: When navigating to a specific past date, the current date-scoped behavior remains unchanged
   - **Folder filter works**: The folder filter still applies within the "Recent Feeds" result set
   - **Date navigation available**: Date picker and prev/next links are visible in "Recent Feeds" mode; navigating to a date switches to that date's articles
+- **Priority**: Must-have
+
+### Module 11: Fetch Deduplication
+- **Description**: Guarantee that no article is stored twice. The article's URL/permalink is the source of truth for uniqueness, checked globally across ALL feeds (not just within a single feed).
+- **Key features**:
+  - On fetch, resolve the article's permalink (URL with tracking parameters normalized where feasible)
+  - Check if the URL already exists anywhere in the articles table
+  - If it exists: update mutable fields (title, content, author, cover image) on the existing record instead of creating a duplicate
+  - If it does not exist: create the article as usual
+  - External IDs (e.g., `<guid>`) continue to be stored, but URL is the primary dedup key
+- **Priority**: Must-have
+
+### Module 12: Feed Health Recovery
+- **Description**: Disabled feeds (8+ consecutive errors) recover automatically after one month of inactivity, removing the need for manual re-enabling.
+- **Key features**:
+  - Dedicated artisan command (e.g., `rss:feed:recover`) that scans feeds with `is_enabled = false`
+  - A feed qualifies for recovery when its `updated_at` is older than 1 month (inactive for 30+ days)
+  - On recovery: `error_count` is reset to 0 and the feed is re-enabled (`is_enabled = true`) so the next scheduled fetch includes it
+  - Must report which feeds were recovered (and how many) in the CLI output
+  - Registered in the Laravel scheduler to run daily
+- **Priority**: Must-have
+
+### Module 13: Sources Directory
+- **Description**: A public page listing ALL subscribed sources (regardless of date) with their last fetch time, styled like a table of contents for quick scanning.
+- **Key features**:
+  - New route/page (e.g., `/sources`) accessible from a "Sources" link placed after the date picker (separated by a divider) on the article page
+  - Page title: "RSS Sources", with a "Back to feeds" link at the top returning to the article page (SPA-compatible)
+  - Lists every feed in the system — not filtered by the currently selected date
+  - Each row shows: favicon + feed name on the left, last fetched time on the right (TOC-style: name left-aligned, time right-aligned)
+  - Each source row links to the source site's homepage (site_url), opening in a new tab (`target="_blank"` + `rel="noopener noreferrer"`); sources without a valid site homepage render as plain, non-clickable text
+  - Sorted by most recently fetched first (descending `last_fetched_at`)
+  - Feeds with no fetch history appear at the bottom
+  - SPA-compatible: works with fragment navigation like the other pages
+- **Priority**: Must-have
+
+### Module 14: Modal Interaction & Content Polish
+- **Description**: Improve the article reading modal so it feels native: easy to dismiss, safe browsing, and consistent image rendering.
+- **Key features**:
+  - Click anywhere OUTSIDE the modal content (the dark backdrop area of the full screen) to close the modal — including the scrollable area around the content
+  - All links inside the modal content body open in a new tab (`target="_blank"` with `rel="noopener noreferrer"`)
+  - Images inside the modal content always render at `width: 100%`, `max-width: 100%`, `height: auto` (responsive, never overflow)
 - **Priority**: Must-have
 
 ## 5. Non-Functional Requirements

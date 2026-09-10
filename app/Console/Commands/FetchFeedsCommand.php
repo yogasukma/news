@@ -98,7 +98,10 @@ class FetchFeedsCommand extends Command
             $skippedForFeed = 0;
 
             foreach ($result['articles'] as $articleData) {
-                if ($articleData['published_at'] === null) {
+                // Skip articles without a publication date or a permalink —
+                // a blank URL has no meaningful dedup key and would collide
+                // on the unique url index.
+                if ($articleData['published_at'] === null || blank($articleData['url'])) {
                     $skippedForFeed++;
 
                     continue;
@@ -150,23 +153,27 @@ class FetchFeedsCommand extends Command
 
     private function storeArticle(Feed $feed, array $data): Article
     {
-        $identifier = $data['external_id'] ?? $data['url'] ?? null;
+        $url = Article::normalizeUrl($data['url']);
 
-        $matchFields = $identifier !== null
-            ? ['feed_id' => $feed->id, 'external_id' => $identifier]
-            : ['feed_id' => $feed->id, 'url' => $data['url']];
-
-        $article = Article::where($matchFields)->first();
+        // The URL is the single source of truth for uniqueness — checked
+        // globally across ALL feeds so an article is never stored twice.
+        $article = Article::where('url', $url)->first();
 
         if ($article !== null) {
-            // Update mutable fields only — preserve published_at
-            $article->update([
+            $updates = [
                 'title' => $data['title'],
-                'url' => $data['url'],
                 'content' => $data['content'],
                 'author' => $data['author'],
                 'cover_image' => $data['cover_image'],
-            ]);
+            ];
+
+            // Don't clobber an existing external_id with a missing/changed guid.
+            if (blank($article->external_id) && filled($data['external_id'])) {
+                $updates['external_id'] = $data['external_id'];
+            }
+
+            // Update mutable fields only — preserve feed_id and published_at.
+            $article->update($updates);
 
             return $article;
         }
@@ -174,7 +181,7 @@ class FetchFeedsCommand extends Command
         return Article::create([
             'feed_id' => $feed->id,
             'title' => $data['title'],
-            'url' => $data['url'],
+            'url' => $url,
             'content' => $data['content'],
             'author' => $data['author'],
             'published_at' => $data['published_at'],
