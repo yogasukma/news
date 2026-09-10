@@ -51,7 +51,7 @@ describe('US-040: sources page', function () {
 
         // favicon + name left, time right (name appears before the time in document order)
         $namePos = strpos($content, 'Example Blog');
-        $timePos = strpos($content, '3 hours ago');
+        $timePos = strpos($content, $feed->last_fetched_at->diffForHumans());
         $faviconPos = strpos($content, 'favicon.ico');
 
         expect($namePos)->not->toBe(false);
