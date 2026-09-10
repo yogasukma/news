@@ -506,7 +506,9 @@
 - **Acceptance Criteria**:
   - [ ] Given the article page, When I look right after the date picker, Then a separator is shown followed by a "Sources" link
   - [ ] Given I click the "Sources" link, When the page loads, Then all feeds are listed (not limited to the currently selected date)
+  - [ ] Given the sources page, Then the page title reads "RSS Sources" and a "Back to feeds" link returns to the article page
   - [ ] Given feeds are listed, Then each row shows favicon + feed name on the left and last fetched time on the right (table-of-contents style)
+  - [ ] Given a source with a site homepage, Then its row links to the site URL and opens in a new tab (with `rel="noopener noreferrer"`); sources without a valid site homepage render as plain text
   - [ ] Given feeds are listed, Then they are sorted by last fetched time descending (most recently fetched first)
   - [ ] Given feeds that have never been fetched, When listed, Then they appear at the bottom
   - [ ] Given the SPA fetches the Sources page fragment, Then the same content renders without a full page reload

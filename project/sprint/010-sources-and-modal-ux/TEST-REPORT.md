@@ -1,16 +1,16 @@
 # Test Report: Sprint 010
 
 ## Summary
-- Total tests: 237
-- Passed: 237
+- Total tests: 241
+- Passed: 241
 - Failed: 0
 - Skipped: 0
-- Coverage: 100% of sprint acceptance criteria (12/12 ACs across 4 stories)
+- Coverage: 100% of sprint acceptance criteria (20/20 ACs across 4 stories)
 
 ## Results by User Story
 
 ### US-040: Sources page listing all feeds with last fetch time
-**Test file**: `tests/Feature/SourcesPageTest.php` (11 tests)
+**Test file**: `tests/Feature/SourcesPageTest.php` (15 tests)
 
 | Test | Description | Result |
 |------|-------------|--------|
@@ -23,6 +23,10 @@
 | test_spa_fragment_renders_same_content | AC6: `?fragment=1` returns content with no layout shell | PASS |
 | test_empty_state | No-feeds empty state renders | PASS |
 | test_feed_count_in_header | Header pluralization ("3 sources") | PASS |
+| test_titles_page_rss_sources | Refinement: h1 reads "RSS Sources" | PASS |
+| test_back_to_feeds_link | Refinement: "Back to feeds" link (`href="/"`, `data-spa`) above the title | PASS |
+| test_source_rows_link_to_site_homepage | Refinement: row href precedes title (link wraps the name), fetch time outside link, `target="_blank"` + `rel="noopener noreferrer"` | PASS |
+| test_no_site_homepage_plain_text | Refinement: feed without `http(s)` site_url renders non-clickable (no `href="http` in fragment) | PASS |
 | test_folder_name_next_to_feed_title | Folder label renders after feed title | PASS |
 | test_diff_for_humans_formatting | Relative fetch-time formatting (computed, flake-proof) | PASS |
 
@@ -70,6 +74,10 @@
 | US-040 | AC4: sorted by last fetched desc | test_sorts_by_last_fetched_desc | PASS |
 | US-040 | AC5: never-fetched at bottom / "Never" | test_never_fetched_at_bottom, test_shows_never | PASS |
 | US-040 | AC6: SPA fragment renders same content | test_spa_fragment_renders_same_content | PASS |
+| US-040 | AC-extra: title "RSS Sources" | test_titles_page_rss_sources | PASS |
+| US-040 | AC-extra: "Back to feeds" link | test_back_to_feeds_link | PASS |
+| US-040 | AC-extra: rows link to site homepage in new tab | test_source_rows_link_to_site_homepage | PASS |
+| US-040 | AC-extra: no-site rows plain text | test_no_site_homepage_plain_text | PASS |
 | US-041 | AC1: backdrop click closes | test_overlay_click_listener_wired | PASS |
 | US-041 | AC2: scrollable-area click closes | test_overlay_click_listener_wired (target outside `#modal-content`) | PASS |
 | US-041 | AC3: inside-content click stays open | `closest('#modal-content')` guard (source assertion) | PASS |
@@ -85,7 +93,7 @@
 None.
 
 ## Regression Notes
-- Full suite: **237 passed, 691 assertions** (previous baseline: 218 passed + 1 pre-existing failure — the stale failure is now fixed).
+- Full suite: **241 passed, 706 assertions** (previous baseline: 218 passed + 1 pre-existing failure — the stale failure is now fixed).
 - `npm run build` succeeds (Vite production bundle compiles the modified JS/CSS).
 - `vendor/bin/pint --dirty` passes.
 

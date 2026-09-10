@@ -50,4 +50,11 @@
 - **A2/A4/A6/A9**: Not applicable (no new auth, crypto, or config surfaces)
 
 ## Overall Assessment
-**Pass** — 1 warning found and fixed; no critical issues. Full suite: 237 passed, 0 failed.
+**Pass** — 1 warning found and fixed; no critical issues. Full suite: 241 passed, 0 failed.
+
+## Addendum: Post-Review Owner Refinements (Sources page)
+Re-reviewed after owner feedback:
+- **[OK]** Rows wrap the source name in `<a href="{{ $site_url }}" target="_blank" rel="noopener noreferrer">` linking to the site **homepage** (not the RSS URL); fetch time stays outside the link
+- **[OK]** Defensive scheme guard: rows link only when `site_url` starts with `http` — feeds without a homepage (or with a `javascript:`-style URL) render as plain text; **A1/A3** surface unchanged (Blade-escaped, external target, `rel=noopener`)
+- **[OK]** "Back to feeds" link (`href="/"`, `data-spa`) and "RSS Sources" title — layout/fragment consistency verified
+- 4 new tests added (title, back link, clickable rows, plain-text fallback); suite green at 241

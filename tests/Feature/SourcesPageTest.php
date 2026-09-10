@@ -129,6 +129,67 @@ describe('US-040: sources page', function () {
             ->assertSee('3 sources');
     });
 
+    it('titles the page RSS Sources', function () {
+        Feed::factory()->create();
+
+        $this->get('/sources')
+            ->assertSuccessful()
+            ->assertSee('RSS Sources');
+    });
+
+    it('provides a back to feeds link using SPA navigation', function () {
+        Feed::factory()->create();
+
+        $response = $this->get('/sources');
+
+        $content = $response->getContent();
+
+        expect($content)->toContain('href="/"');
+        $backPos = strpos($content, 'Back to feeds');
+
+        expect($backPos)->not->toBe(false);
+        expect($backPos)->toBeLessThan(strpos($content, 'RSS Sources'));
+    });
+
+    it('links each source row to its site homepage in a new tab', function () {
+        $feed = Feed::factory()->create([
+            'title' => 'Clickable Feed',
+            'site_url' => 'https://example.com',
+            'last_fetched_at' => now()->subHours(1),
+        ]);
+
+        $response = $this->get('/sources');
+
+        $response->assertSuccessful();
+        $content = $response->getContent();
+
+        $hrefPos = strpos($content, 'href="https://example.com"');
+        $titlePos = strpos($content, 'Clickable Feed');
+        $timePos = strpos($content, $feed->last_fetched_at->diffForHumans());
+
+        expect($hrefPos)->not->toBe(false);
+        expect($titlePos)->not->toBe(false);
+        // The row link wraps the feed name (href appears before the title)
+        expect($hrefPos)->toBeLessThan($titlePos);
+        // The fetch time stays outside the link (appears after the title)
+        expect($titlePos)->toBeLessThan($timePos);
+        expect($content)->toContain('target="_blank"');
+        expect($content)->toContain('rel="noopener noreferrer"');
+    });
+
+    it('renders sources without a site homepage as plain, non-clickable text', function () {
+        Feed::factory()->create([
+            'title' => 'No Site Feed',
+            'site_url' => null,
+        ]);
+
+        $response = $this->get('/sources?fragment=1');
+
+        $response->assertSuccessful()->assertSee('No Site Feed');
+        // No http(s) anchor exists anywhere in the fragment (back link uses "/")
+        $response->assertDontSee('href="http', false);
+    });
+
     it('includes the folder name next to the feed title when assigned', function () {
         $folder = Folder::create(['name' => 'Tech', 'slug' => 'tech']);
         $feed = Feed::factory()->inFolder($folder)->create(['title' => 'Tech Blog']);
