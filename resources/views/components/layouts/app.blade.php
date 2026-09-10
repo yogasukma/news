@@ -7,7 +7,7 @@
     <link rel="manifest" href="/manifest.json">
     <link rel="apple-touch-icon" href="/icons/icon-192.png">
 
-    <title>{{ $title ?? 'RSS Reader' }}</title>
+    <title>{{ $title ?? 'Feeds' }}</title>
 
     @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/spa.js', 'resources/js/read-state.js'])
 </head>
