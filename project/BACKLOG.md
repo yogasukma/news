@@ -2,11 +2,11 @@
 
 ## Summary
 - Total stories: 46
-- Delivered: 43 (Sprint 001: 12, Sprint 002: 9, Sprint 003: 4, Sprint 004: 3, Sprint 005: 4, Sprint 006: 2, Sprint 007: 2, Sprint 008: 1, Sprint 009: 2, Sprint 010: 4)
-- Remaining: 3 (Sprint 011: 3 stories, 10 points)
+- Delivered: 46 (Sprint 001: 12, Sprint 002: 9, Sprint 003: 4, Sprint 004: 3, Sprint 005: 4, Sprint 006: 2, Sprint 007: 2, Sprint 008: 1, Sprint 009: 2, Sprint 010: 4, Sprint 011: 3)
+- Remaining: 0
 - Total story points: 166
-- Delivered points: 156
-- Remaining points: 10
+- Delivered points: 166
+- Remaining points: 0
 
 ---
 
@@ -555,22 +555,24 @@
 
 ## Module: Source Detail Page
 
-### US-044: Sources list rows navigate to source detail page
+### US-044: [DELIVERED] Sources list rows navigate to source detail page
 - **As a** public visitor, **I want** to click any source on the sources page and be taken to that source's detail page, **so that** I can browse all news from a single source without leaving the app.
 - **Priority**: P0
 - **Points**: 2
 - **Dependencies**: US-040
+- **Status**: Delivered in Sprint 011
 - **Acceptance Criteria**:
   - [ ] Given a source row on the sources page, When I click it, Then the browser navigates to `/sources/{feed-id}` (internal navigation, no new tab)
   - [ ] Given a source row, When the link is rendered, Then it is SPA-compatible (`data-spa`) so the page swaps without a full reload
   - [ ] Given a source without a valid site_url, When its row is rendered, Then it is still clickable and links to its detail page (replaces the old non-clickable plain-text behavior)
   - [ ] Given a source row, When rendered, Then it no longer contains a `target="_blank"` external link (the old new-tab behavior is removed)
 
-### US-045: Source detail page — route, header, and not-found handling
+### US-045: [DELIVERED] Source detail page — route, header, and not-found handling
 - **As a** public visitor, **I want** to visit `/sources/{id}` and see a header identifying the source, **so that** I know which source I'm viewing.
 - **Priority**: P0
 - **Points**: 3
 - **Dependencies**: US-044
+- **Status**: Delivered in Sprint 011
 - **Acceptance Criteria**:
   - [ ] Given a valid feed id, When I visit `/sources/{id}`, Then the page renders with HTTP 200
   - [ ] Given a non-existent feed id, When I visit `/sources/{id}`, Then a 404 response is returned
@@ -579,11 +581,12 @@
   - [ ] Given a feed without a valid site_url, When the header renders, Then the title and favicon show without any external link
   - [ ] Given the source detail page, Then a link to return to the sources list is available
 
-### US-046: Source detail page — paginated article list with modal
+### US-046: [DELIVERED] Source detail page — paginated article list with modal
 - **As a** public visitor, **I want** to see all articles from a source on its detail page, **so that** I can catch up on everything that source has published.
 - **Priority**: P0
 - **Points**: 5
 - **Dependencies**: US-045
+- **Status**: Delivered in Sprint 011
 - **Acceptance Criteria**:
   - [ ] Given a source with articles, When I visit its detail page, Then its articles are listed newest first
   - [ ] Given a source with more than 30 articles, When the list is rendered, Then it is paginated (30 per page) with pagination controls
