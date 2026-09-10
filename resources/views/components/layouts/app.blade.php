@@ -39,7 +39,7 @@
     {{-- Article Modal --}}
     <div id="article-modal" class="fixed inset-0 z-50 hidden">
         <div class="fixed inset-0 bg-black/50" id="modal-backdrop"></div>
-        <div class="fixed inset-0 overflow-y-auto">
+        <div class="fixed inset-0 overflow-y-auto" id="modal-overlay">
             <div class="flex min-h-full items-start justify-center p-4 py-8">
                 <div class="relative bg-white rounded-lg shadow-xl w-full max-w-2xl" id="modal-content">
                     <div class="sticky top-0 bg-white border-b border-stone-200 px-6 py-4 rounded-t-lg flex items-center justify-between">
