@@ -151,7 +151,7 @@ describe('US-040: sources page', function () {
         expect($backPos)->toBeLessThan(strpos($content, 'RSS Sources'));
     });
 
-    it('links each source row to its site homepage in a new tab', function () {
+    it('links each source row to its source detail page via SPA navigation', function () {
         $feed = Feed::factory()->create([
             'title' => 'Clickable Feed',
             'site_url' => 'https://example.com',
@@ -163,7 +163,7 @@ describe('US-040: sources page', function () {
         $response->assertSuccessful();
         $content = $response->getContent();
 
-        $hrefPos = strpos($content, 'href="https://example.com"');
+        $hrefPos = strpos($content, 'href="'.route('sources.show', $feed).'"');
         $titlePos = strpos($content, 'Clickable Feed');
         $timePos = strpos($content, $feed->last_fetched_at->diffForHumans());
 
@@ -173,12 +173,16 @@ describe('US-040: sources page', function () {
         expect($hrefPos)->toBeLessThan($titlePos);
         // The fetch time stays outside the link (appears after the title)
         expect($titlePos)->toBeLessThan($timePos);
-        expect($content)->toContain('target="_blank"');
-        expect($content)->toContain('rel="noopener noreferrer"');
+        // Internal SPA link — no external new-tab behavior on the row
+        expect($content)->toContain('data-spa');
+        expect($content)->not->toContain('href="https://example.com"');
+        // The detail-page row link itself is not a new-tab link
+        // (other target="_blank" instances in the response belong to the shared modal layout)
+        expect($content)->not->toContain(route('sources.show', $feed).'" target="_blank"');
     });
 
-    it('renders sources without a site homepage as plain, non-clickable text', function () {
-        Feed::factory()->create([
+    it('renders sources without a site homepage as clickable detail links', function () {
+        $feed = Feed::factory()->create([
             'title' => 'No Site Feed',
             'site_url' => null,
         ]);
@@ -186,8 +190,8 @@ describe('US-040: sources page', function () {
         $response = $this->get('/sources?fragment=1');
 
         $response->assertSuccessful()->assertSee('No Site Feed');
-        // No http(s) anchor exists anywhere in the fragment (back link uses "/")
-        $response->assertDontSee('href="http', false);
+        // No external http(s) anchor exists anywhere in the fragment (only internal detail-page links)
+        expect($response->getContent())->toContain(route('sources.show', $feed));
     });
 
     it('includes the folder name next to the feed title when assigned', function () {

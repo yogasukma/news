@@ -19,8 +19,13 @@ window.openArticle = async function (id) {
 
         modalTitle.textContent = article.title;
 
-        // Build meta line with optional favicon (using DOM API to prevent XSS)
+        // Build meta line: feed name links to its source page (using DOM API to prevent XSS)
         modalMeta.innerHTML = '';
+        const feedLink = document.createElement('a');
+        feedLink.href = `/sources/${article.feed.id}`;
+        feedLink.dataset.spa = '';
+        feedLink.className = 'font-medium text-stone-600 hover:text-stone-900 hover:underline transition-colors inline-flex items-center gap-1';
+        feedLink.addEventListener('click', closeModal);
         if (article.feed.favicon_url) {
             const faviconImg = document.createElement('img');
             faviconImg.src = article.feed.favicon_url;
@@ -28,11 +33,12 @@ window.openArticle = async function (id) {
             faviconImg.className = 'w-4 h-4 rounded-sm inline-block align-text-bottom';
             faviconImg.loading = 'lazy';
             faviconImg.onerror = function () { this.style.display = 'none'; };
-            modalMeta.appendChild(faviconImg);
-            modalMeta.appendChild(document.createTextNode(' '));
+            feedLink.appendChild(faviconImg);
         }
+        feedLink.appendChild(document.createTextNode(article.feed.title));
+        modalMeta.appendChild(feedLink);
         const metaText = document.createTextNode(
-            `${article.feed.title}${article.author ? ` · by ${article.author}` : ''} · ${new Date(article.published_at).toLocaleString()}`
+            `${article.author ? ` · by ${article.author}` : ''} · ${new Date(article.published_at).toLocaleString()}`
         );
         modalMeta.appendChild(metaText);
         modalBody.innerHTML = article.content || '<p class="text-stone-400">No content available.</p>';

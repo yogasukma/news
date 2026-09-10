@@ -27,4 +27,25 @@ class SourcesController extends Controller
 
         return response()->view('sources.index', $data);
     }
+
+    /**
+     * Display a single source: its identity header plus a paginated
+     * article list (newest first). Unknown feed ids resolve to 404 via
+     * implicit route-model binding.
+     */
+    public function show(Feed $feed, Request $request): Response
+    {
+        $articles = $feed->articles()
+            ->with('feed.folder')
+            ->orderByDesc('published_at')
+            ->paginate(30);
+
+        $data = ['feed' => $feed, 'articles' => $articles];
+
+        if ($request->query('fragment') === '1') {
+            return response()->view('sources.partials.show-content', $data);
+        }
+
+        return response()->view('sources.show', $data);
+    }
 }
