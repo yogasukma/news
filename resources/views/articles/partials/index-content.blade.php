@@ -1,3 +1,20 @@
+@php
+    // On the "Today's Feeds" list, cap the articles shown per source at 3 so a
+    // single feed cannot dominate the page. This is display-only: the full list
+    // is still fetched and the cap is skipped for Recent Feeds and past dates.
+    $displayedArticles = $articles;
+
+    if ($mode === 'today') {
+        $perFeedSeen = [];
+
+        $displayedArticles = $articles->filter(function ($article) use (&$perFeedSeen) {
+            $perFeedSeen[$article->feed_id] = ($perFeedSeen[$article->feed_id] ?? 0) + 1;
+
+            return $perFeedSeen[$article->feed_id] <= 3;
+        })->values();
+    }
+@endphp
+
 {{-- Date Header --}}
 <div class="mb-6">
     <h1 class="text-2xl font-bold text-stone-900">
@@ -10,7 +27,7 @@
         @endif
     </h1>
     <p class="text-sm text-stone-500 mt-1">
-        {{ $articles->count() }} {{ Str('article')->plural($articles->count()) }}
+        {{ $displayedArticles->count() }} {{ Str('article')->plural($displayedArticles->count()) }}
     </p>
 </div>
 
@@ -81,13 +98,13 @@
 </div>
 
 {{-- Article List --}}
-@if ($articles->isEmpty())
+@if ($displayedArticles->isEmpty())
     <div class="text-center py-16">
         <p class="text-stone-400 text-lg">{{ $mode === 'recent' ? 'No articles found.' : 'No articles on this date.' }}</p>
     </div>
 @else
     <div class="space-y-4">
-        @foreach ($articles as $article)
+        @foreach ($displayedArticles as $article)
             <x-partials.article-card :article="$article" :mode="$mode" />
         @endforeach
     </div>
