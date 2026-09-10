@@ -24,19 +24,10 @@
 @else
     <div class="bg-white rounded-lg border border-stone-200 divide-y divide-stone-100">
         @foreach ($feeds as $feed)
-            @php
-                $siteUrl = $feed->site_url && str_starts_with($feed->site_url, 'http') ? $feed->site_url : null;
-            @endphp
             <div class="flex items-center justify-between gap-4 px-4 py-3">
-                @if ($siteUrl)
-                    <a href="{{ $siteUrl }}"
-                       target="_blank"
-                       rel="noopener noreferrer"
-                       title="{{ $siteUrl }}"
-                       class="flex items-center gap-2 min-w-0 group">
-                @else
-                    <div class="flex items-center gap-2 min-w-0">
-                @endif
+                <a href="{{ route('sources.show', $feed) }}"
+                   data-spa
+                   class="flex items-center gap-2 min-w-0 group">
                     @if ($feed->favicon_url)
                         <img src="{{ $feed->favicon_url }}"
                              alt=""
@@ -44,16 +35,12 @@
                              loading="lazy"
                              onerror="this.style.display='none'">
                     @endif
-                    <span class="font-medium text-stone-700 truncate {{ $siteUrl ? 'group-hover:text-stone-900' : '' }}">{{ $feed->title }}</span>
+                    <span class="font-medium text-stone-700 truncate group-hover:text-stone-900">{{ $feed->title }}</span>
                     @if ($feed->folder)
                         <span class="text-stone-300">·</span>
                         <span class="text-sm text-stone-500 truncate">{{ $feed->folder->name }}</span>
                     @endif
-                @if ($siteUrl)
-                    </a>
-                @else
-                    </div>
-                @endif
+                </a>
                 <div class="shrink-0">
                     @if ($feed->last_fetched_at)
                         <time datetime="{{ $feed->last_fetched_at->toIso8601String() }}"
