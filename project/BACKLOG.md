@@ -2,11 +2,11 @@
 
 ## Summary
 - Total stories: 43
-- Delivered: 39 (Sprint 001: 12, Sprint 002: 9, Sprint 003: 4, Sprint 004: 3, Sprint 005: 4, Sprint 006: 2, Sprint 007: 2, Sprint 008: 1, Sprint 009: 2)
-- Remaining: 4
+- Delivered: 43 (Sprint 001: 12, Sprint 002: 9, Sprint 003: 4, Sprint 004: 3, Sprint 005: 4, Sprint 006: 2, Sprint 007: 2, Sprint 008: 1, Sprint 009: 2, Sprint 010: 4)
+- Remaining: 0
 - Total story points: 156
-- Delivered points: 139
-- Remaining points: 9
+- Delivered points: 156
+- Remaining points: 0
 
 ---
 
@@ -497,11 +497,12 @@
 
 ## Module: Sources Directory
 
-### US-040: [PENDING] Sources page listing all feeds with last fetch time
+### US-040: [DELIVERED] Sources page listing all feeds with last fetch time
 - **As a** public visitor, **I want** to open a "Sources" page from the article page that lists all sources with their last fetch time, **so that** I can see the full list of subscriptions and how fresh each one is.
 - **Priority**: P1
 - **Points**: 5
 - **Dependencies**: US-015
+- **Status**: Delivered in Sprint 010
 - **Acceptance Criteria**:
   - [ ] Given the article page, When I look right after the date picker, Then a separator is shown followed by a "Sources" link
   - [ ] Given I click the "Sources" link, When the page loads, Then all feeds are listed (not limited to the currently selected date)
@@ -514,32 +515,35 @@
 
 ## Module: Modal Interaction & Content Polish
 
-### US-041: [PENDING] Close article modal by clicking outside content
+### US-041: [DELIVERED] Close article modal by clicking outside content
 - **As a** public visitor, **I want** to close the article modal by clicking anywhere outside the modal content, **so that** I don't have to find the close button.
 - **Priority**: P1
 - **Points**: 2
 - **Dependencies**: US-019
+- **Status**: Delivered in Sprint 010
 - **Acceptance Criteria**:
   - [ ] Given the modal is open, When I click the dark backdrop area, Then the modal closes
   - [ ] Given the modal is open, When I click the scrollable area around the content (outside the white card), Then the modal closes
   - [ ] Given the modal is open, When I click inside the modal content, Then the modal stays open
   - [ ] Given the modal is open, When I press Escape, Then the modal still closes (existing behavior preserved)
 
-### US-042: [PENDING] Open modal content links in a new tab
+### US-042: [DELIVERED] Open modal content links in a new tab
 - **As a** public visitor, **I want** every link inside the article modal content to open in a new tab, **so that** I don't lose my place in the reader.
 - **Priority**: P2
 - **Points**: 1
 - **Dependencies**: US-019
+- **Status**: Delivered in Sprint 010
 - **Acceptance Criteria**:
   - [ ] Given links inside the modal body content, When the modal renders, Then each link has `target="_blank"`
   - [ ] Given links inside the modal body content, Then each link also has `rel="noopener noreferrer"`
   - [ ] Given the "Read original" footer link, Then it keeps its existing new-tab behavior
 
-### US-043: [PENDING] Responsive full-width images in modal content
+### US-043: [DELIVERED] Responsive full-width images in modal content
 - **As a** public visitor, **I want** images inside the article modal to fit the content width, **so that** they never overflow or break the layout on any screen.
 - **Priority**: P2
 - **Points**: 1
 - **Dependencies**: US-019
+- **Status**: Delivered in Sprint 010
 - **Acceptance Criteria**:
   - [ ] Given an image in the modal content, When rendered, Then its width is 100% and max-width is 100%
   - [ ] Given an image in the modal content, When rendered, Then its height is auto and the aspect ratio is preserved
