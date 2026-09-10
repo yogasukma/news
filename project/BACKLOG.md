@@ -1,12 +1,12 @@
 # Product Backlog
 
 ## Summary
-- Total stories: 37
-- Delivered: 37 (Sprint 001: 12, Sprint 002: 9, Sprint 003: 4, Sprint 004: 3, Sprint 005: 4, Sprint 006: 2, Sprint 007: 2, Sprint 008: 1)
-- Remaining: 0
-- Total story points: 139
+- Total stories: 43
+- Delivered: 39 (Sprint 001: 12, Sprint 002: 9, Sprint 003: 4, Sprint 004: 3, Sprint 005: 4, Sprint 006: 2, Sprint 007: 2, Sprint 008: 1, Sprint 009: 2)
+- Remaining: 4
+- Total story points: 156
 - Delivered points: 139
-- Remaining points: 0
+- Remaining points: 9
 
 ---
 
@@ -462,3 +462,85 @@
   - [ ] Given search results spanning multiple dates, When article cards are rendered, Then both date and time are shown (e.g., "May 4, 3:45 PM")
   - [ ] Given search results from a single date, When article cards are rendered, Then both date and time are still shown for consistency
   - [ ] Given search results, When the SPA fetches a fragment, Then date+time is shown in the fragment as well
+
+---
+
+## Module: Fetch Deduplication
+
+### US-038: [DELIVERED] Global duplicate prevention by article URL
+- **As a** site owner, **I want** the fetcher to check the article's URL/permalink against all stored articles before saving, **so that** no article is ever stored twice, regardless of which feed it came from.
+- **Priority**: P0
+- **Points**: 5
+- **Dependencies**: US-009, US-010
+- **Status**: Delivered in Sprint 009
+- **Acceptance Criteria**:
+  - [ ] Given an article URL already stored in the same feed, When fetched again, Then the existing article is updated (title, content, author, cover image) and no duplicate is created
+  - [ ] Given an article URL already stored from a DIFFERENT feed, When fetched, Then the existing article is updated and no duplicate is created
+  - [ ] Given a URL that does not exist in storage, When fetched, Then a new article is created
+  - [ ] Given a URL that differs only by tracking parameters (e.g., `?utm_source=...`), When fetched, Then it is treated as the same article and not duplicated
+  - [ ] Given the external_id/guid exists, When the same article arrives with a missing or changed guid, Then the URL check still prevents duplication
+
+### US-039: [DELIVERED] Re-enable disabled feeds after one month of inactivity
+- **As a** site owner, **I want** disabled feeds to be automatically re-enabled after a month without updates, **so that** temporarily-down sources recover without manual intervention.
+- **Priority**: P1
+- **Points**: 3
+- **Dependencies**: US-031
+- **Status**: Delivered in Sprint 009
+- **Acceptance Criteria**:
+  - [ ] Given a disabled feed whose `updated_at` is more than 1 month old, When `rss:feed:recover` runs, Then `error_count` is reset to 0 and the feed is re-enabled (`is_enabled = true`)
+  - [ ] Given a disabled feed whose `updated_at` is less than 1 month old, When the command runs, Then the feed remains disabled
+  - [ ] Given an enabled feed with errors, When the command runs, Then it is left unchanged
+  - [ ] Given recovered feeds, When the command completes, Then the output lists each recovered feed and the total count
+  - [ ] Given the scheduler is configured, Then `rss:feed:recover` is registered to run daily
+
+---
+
+## Module: Sources Directory
+
+### US-040: [PENDING] Sources page listing all feeds with last fetch time
+- **As a** public visitor, **I want** to open a "Sources" page from the article page that lists all sources with their last fetch time, **so that** I can see the full list of subscriptions and how fresh each one is.
+- **Priority**: P1
+- **Points**: 5
+- **Dependencies**: US-015
+- **Acceptance Criteria**:
+  - [ ] Given the article page, When I look right after the date picker, Then a separator is shown followed by a "Sources" link
+  - [ ] Given I click the "Sources" link, When the page loads, Then all feeds are listed (not limited to the currently selected date)
+  - [ ] Given feeds are listed, Then each row shows favicon + feed name on the left and last fetched time on the right (table-of-contents style)
+  - [ ] Given feeds are listed, Then they are sorted by last fetched time descending (most recently fetched first)
+  - [ ] Given feeds that have never been fetched, When listed, Then they appear at the bottom
+  - [ ] Given the SPA fetches the Sources page fragment, Then the same content renders without a full page reload
+
+---
+
+## Module: Modal Interaction & Content Polish
+
+### US-041: [PENDING] Close article modal by clicking outside content
+- **As a** public visitor, **I want** to close the article modal by clicking anywhere outside the modal content, **so that** I don't have to find the close button.
+- **Priority**: P1
+- **Points**: 2
+- **Dependencies**: US-019
+- **Acceptance Criteria**:
+  - [ ] Given the modal is open, When I click the dark backdrop area, Then the modal closes
+  - [ ] Given the modal is open, When I click the scrollable area around the content (outside the white card), Then the modal closes
+  - [ ] Given the modal is open, When I click inside the modal content, Then the modal stays open
+  - [ ] Given the modal is open, When I press Escape, Then the modal still closes (existing behavior preserved)
+
+### US-042: [PENDING] Open modal content links in a new tab
+- **As a** public visitor, **I want** every link inside the article modal content to open in a new tab, **so that** I don't lose my place in the reader.
+- **Priority**: P2
+- **Points**: 1
+- **Dependencies**: US-019
+- **Acceptance Criteria**:
+  - [ ] Given links inside the modal body content, When the modal renders, Then each link has `target="_blank"`
+  - [ ] Given links inside the modal body content, Then each link also has `rel="noopener noreferrer"`
+  - [ ] Given the "Read original" footer link, Then it keeps its existing new-tab behavior
+
+### US-043: [PENDING] Responsive full-width images in modal content
+- **As a** public visitor, **I want** images inside the article modal to fit the content width, **so that** they never overflow or break the layout on any screen.
+- **Priority**: P2
+- **Points**: 1
+- **Dependencies**: US-019
+- **Acceptance Criteria**:
+  - [ ] Given an image in the modal content, When rendered, Then its width is 100% and max-width is 100%
+  - [ ] Given an image in the modal content, When rendered, Then its height is auto and the aspect ratio is preserved
+  - [ ] Given an image in the modal content, When rendered, Then the existing border-radius styling is preserved
