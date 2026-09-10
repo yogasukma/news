@@ -11,4 +11,4 @@
 | 007 | recent-feeds-fallback | Completed | 2026-05-05 | 2026-05-05 | 2 | 7 |
 | 008 | search-date-display | Completed | 2026-05-05 | 2026-05-05 | 1 | 2 |
 | 009 | data-integrity | Completed | 2026-09-10 | 2026-09-10 | 2 | 8 |
-| 010 | sources-and-modal-ux | In Progress | 2026-09-10 | - | 4 | 9 |
+| 010 | sources-and-modal-ux | Completed | 2026-09-10 | 2026-09-10 | 4 | 9 |
