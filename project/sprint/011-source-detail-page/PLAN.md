@@ -41,19 +41,19 @@ Add per-source detail pages reachable from the sources page, replacing the new-t
 - [x] Task 4: Write tests: newest-first ordering; pagination renders when >30 articles (create 35 via factory, assert page 2 link + articles on page 2); cards show date+time (`M j, g:i A`); clicking card wires `openArticle(id)`; empty state; `?fragment=1` returns content without layout
 
 ### US-047: Link icon next to the site URL on the source detail page
-- [ ] Task 1: In `show-content.blade.php` — add the external-link SVG icon (same icon as "Read original") inside the site-URL anchor, before the text, with `inline-flex items-center gap-1.5` layout
-- [ ] Task 2: Write a test in `SourceDetailPageTest` asserting the icon (svg) renders inside the site-URL anchor when `site_url` is valid
+- [x] Task 1: In `show-content.blade.php` — add the external-link SVG icon (same icon as "Read original") inside the site-URL anchor, before the text, with `inline-flex items-center gap-1.5` layout
+- [x] Task 2: Write a test in `SourceDetailPageTest` asserting the icon (svg) renders inside the site-URL anchor when `site_url` is valid
 
 ### US-048: Source names link to the source detail page across the app
-- [ ] Task 1: In `resources/views/components/partials/article-card.blade.php` — wrap the feed name in `<a href="{{ route('sources.show', $article->feed) }}" data-spa>` (with hover underline); update the card's inline `onclick`/`onkeydown` handlers to bail when `event.target.closest('a')` so clicks on the feed link never open the modal
-- [ ] Task 2: In `resources/js/app.js` `openArticle()` — build the modal meta feed name as an `<a href="/sources/{feed.id}">` (data-spa) holding the favicon + title, with a click listener that closes the modal; keep the author/date text nodes as-is
-- [ ] Task 3: Feature test — article card (homepage) feed name renders as a `data-spa` link to `route('sources.show', $feed)`, and the card's modal handler is guarded (assert `event.target.closest('a')` guard in the served card markup)
-- [ ] Task 4: JS source-assertion test (project convention) — `app.js` builds the modal feed link with `href="/sources/"` and calls `closeModal`; assert via source content (mirror `ModalUxTest` style)
+- [x] Task 1: In `resources/views/components/partials/article-card.blade.php` — wrap the feed name in `<a href="{{ route('sources.show', $article->feed) }}" data-spa>` (with hover underline); update the card's inline `onclick`/`onkeydown` handlers to bail when `event.target.closest('a')` so clicks on the feed link never open the modal
+- [x] Task 2: In `resources/js/app.js` `openArticle()` — build the modal meta feed name as an `<a href="/sources/{feed.id}">` (data-spa) holding the favicon + title, with a click listener that closes the modal; keep the author/date text nodes as-is
+- [x] Task 3: Feature test — article card (homepage) feed name renders as a `data-spa` link to `route('sources.show', $feed)`, and the card's modal handler is guarded (assert `event.target.closest('a')` guard in the served card markup)
+- [x] Task 4: JS source-assertion test (project convention) — `app.js` builds the modal feed link with `href="/sources/"` and calls `closeModal`; assert via source content (mirror `ModalUxTest` style)
 
 ### Sprint Housekeeping
-- [ ] Task 1: Run full test suite (`php artisan test`) — all green
-- [ ] Task 2: Run `vendor/bin/pint --dirty --format agent` on all created/modified PHP files
-- [ ] Task 3: Verify routes with `php artisan route:list` — `/sources` and `/sources/{feed}` both registered
+- [x] Task 1: Run full test suite (`php artisan test`) — all green
+- [x] Task 2: Run `vendor/bin/pint --dirty --format agent` on all created/modified PHP files
+- [x] Task 3: Verify routes with `php artisan route:list` — `/sources` and `/sources/{feed}` both registered
 
 ---
 

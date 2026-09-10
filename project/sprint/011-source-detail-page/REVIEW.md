@@ -1,9 +1,10 @@
 # Code Review: Sprint 011
 
 ## Summary
-- Files reviewed: 7 (1 controller, 1 route, 2 view partials + 1 layout wrapper, 2 test files)
-- Issues found: 0 (Critical: 0, Warning: 0, Info: 2)
-- Issues fixed: 0 (2 test assertions were corrected during development after over-broad checks failed — documented below)
+- Files reviewed: 10 (1 controller, 1 route, 2 view partials + 1 layout wrapper, 1 shared card component, 1 JS module, 3 test files)
+- Issues found: 1 (Critical: 0, Warning: 0, Info: 1)
+- Issues fixed: 1 (over-broad JS assertion in US-046 test, fixed during development)
+- Review rounds: 2 (initial pass + follow-up review of US-047/US-048 additions)
 
 ## Review Results
 
@@ -49,4 +50,29 @@
 - **Sensitive data**: No user data exposed beyond public article content (pre-existing exposure model) ✅
 
 ## Overall Assessment
-**Pass** — no critical or warning issues. Two info-level notes (pagination duplication, redundant eager load) are project-convention-consistent and deferred.
+**Pass** — no critical or warning issues.
+
+## Follow-up Review (US-047 / US-048 additions)
+
+### File: resources/views/sources/partials/show-content.blade.php (US-047)
+- **[OK]** External-link SVG icon added inside the site-URL anchor (icon + URL one anchor, AC). `target="_blank"` + `rel="noopener noreferrer"` preserved; no `data-spa` (external link stays default behavior)
+
+### File: resources/views/components/partials/article-card.blade.php (US-048)
+- **[OK]** Feed name wrapped in `<a href="{{ route('sources.show', $article->feed) }}" data-spa>` with hover underline — SPA navigation works via existing spa.js; feed relationship is eager-loaded on all consuming pages (home/date/search/source-detail)
+- **[OK]** Modal-open handlers guarded: `onclick` / `onkeydown` now bail when `event.target.closest('a')` — clicking the feed link (or any future inner link) never opens the modal; no `stopPropagation()` used, so spa.js's document-level interception still fires
+- **[OK]** Favicon stays inside the link (hover affordance covers icon+title); folder name/separator remain outside
+
+### File: resources/js/app.js (US-048)
+- **[OK]** Modal meta feed name built via DOM API (`createElement` + `createTextNode`) — XSS-safe, no `innerHTML` with feed data
+- **[OK]** Link carries `data-spa` + `href="/sources/{id}"` and a `closeModal` click listener — click closes the modal (target-phase listener) before spa.js intercepts navigation (bubble-phase); no double navigation
+- **[OK]** Author/date text nodes preserved verbatim
+
+### Tests (US-047 / US-048)
+- **[OK]** `SourceDetailPageTest`: icon-in-anchor position assertions; card feed-link + modal-guard feature assertions; app.js source assertions for the modal feed link (`/sources/${id}`, `data-spa`, `closeModal`, textNode)
+
+### Issues fixed in follow-up round
+1. US-046 "wires article cards to open in the reading modal" asserted the old exact `onclick="openArticle(id)"` — updated to assert the guarded handler (`openArticle(...)` + `if (!event.target.closest('a')) openArticle`), reflecting the new contract.
+
+### Info notes (deferred, unchanged from initial review)
+- Pagination block duplicated between `search-content` and `show-content` — future shared-component candidate
+- `with('feed.folder')` on a single bound feed is slightly redundant but harmless

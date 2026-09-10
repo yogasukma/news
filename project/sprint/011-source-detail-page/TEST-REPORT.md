@@ -1,11 +1,11 @@
 # Test Report: Sprint 011
 
 ## Summary
-- Total tests: 254 (full suite)
-- Passed: 254
+- Total tests: 257 (full suite)
+- Passed: 257
 - Failed: 0
 - Skipped: 0
-- New tests this sprint: 28 (14 new `SourceDetailPageTest` + 2 rewritten `SourcesPageTest` + 12 existing sources tests re-verified)
+- New tests this sprint: 31 (17 in new `SourceDetailPageTest` + 2 rewritten `SourcesPageTest` + 12 existing sources tests re-verified)
 
 ## Results by User Story
 
@@ -59,11 +59,17 @@ Tests in `tests/Feature/SourceDetailPageTest.php` (describe block US-046):
 | US-046 | AC4: click opens modal | wires_article_cards_to_open_in_modal | PASS |
 | US-046 | AC5: empty state | shows_empty_state | PASS |
 | US-046 | AC6: fragment renders w/o reload | renders_same_content_via_fragment | PASS |
+| US-047 | AC1: external-link icon next to URL | shows_a_link_icon_next_to_the_site_url | PASS |
+| US-047 | AC2: icon inside the same anchor | shows_a_link_icon_next_to_the_site_url | PASS |
+| US-048 | AC1: card feed name → data-spa link | links_the_feed_name_on_article_cards_to_the_source_page_via_spa | PASS |
+| US-048 | AC2: feed link doesn't open modal | links_the_feed_name_on_article_cards... (guard asserted) | PASS |
+| US-048 | AC3: modal feed name is a link | builds_the_modal_feed_name_as_a_link_to_the_source_page_in_app_js | PASS |
+| US-048 | AC4: modal closes + navigates | builds_the_modal_feed_name... (closeModal listener asserted) | PASS |
 
 ## Failed Tests
-None. Two over-broad assertions were corrected during development (documented in REVIEW.md) and all 254 tests pass.
+None. Two over-broad assertions were corrected during development (documented in REVIEW.md) and all 257 tests pass.
 
 ## Tooling
-- Full suite: `php artisan test --compact` → 254 passed, 747 assertions, 2.15s
-- Formatting: `vendor/bin/pint --dirty --format agent` → 1 style fix applied
+- Full suite: `php artisan test --compact` → 257 passed, 763 assertions, 2.26s
+- Formatting: `vendor/bin/pint --dirty --format agent` → passed, no fixes needed
 - Routes: `php artisan route:list --path=sources` → `sources` (index) + `sources.show` both registered
