@@ -98,7 +98,10 @@ class FetchFeedsCommand extends Command
             $skippedForFeed = 0;
 
             foreach ($result['articles'] as $articleData) {
-                if ($articleData['published_at'] === null) {
+                // Skip articles without a publication date or a permalink —
+                // a blank URL has no meaningful dedup key and would collide
+                // on the unique url index.
+                if ($articleData['published_at'] === null || blank($articleData['url'])) {
                     $skippedForFeed++;
 
                     continue;

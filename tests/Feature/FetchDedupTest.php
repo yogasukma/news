@@ -151,4 +151,28 @@ describe('global URL deduplication', function () {
         // Existing external_id must not be clobbered.
         expect(Article::first()->external_id)->toBe('old-guid');
     });
+
+    it('skips articles without a permalink instead of colliding on the unique index', function () {
+        $feedA = Feed::factory()->create(['url' => 'https://a.com/feed.xml']);
+        $feedB = Feed::factory()->create(['url' => 'https://b.com/feed.xml']);
+
+        $xml = <<<'XML'
+            <?xml version="1.0"?>
+            <rss version="2.0"><channel><title>No Link Blog</title><link>https://example.com</link>
+                <item><title>No Link Post</title><guid>g-1</guid><pubDate>Mon, 04 May 2026 10:00:00 +0000</pubDate></item>
+            </channel></rss>
+            XML;
+
+        Http::fake([
+            'a.com/*' => Http::response($xml),
+            'b.com/*' => Http::response($xml),
+        ]);
+
+        $this->artisan('rss:fetch');
+
+        expect(Article::count())->toBe(0);
+        // Neither feed should error out because of a unique-index collision.
+        expect($feedA->fresh()->is_enabled)->toBeTrue();
+        expect($feedB->fresh()->is_enabled)->toBeTrue();
+    });
 });

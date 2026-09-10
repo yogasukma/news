@@ -28,7 +28,7 @@ class FeedRecoverCommand extends Command
     {
         $staleFeeds = Feed::query()
             ->where('is_enabled', false)
-            ->where('updated_at', '<', now()->subMonth())
+            ->where('updated_at', '<', now()->subDays(30))
             ->get();
 
         if ($staleFeeds->isEmpty()) {
