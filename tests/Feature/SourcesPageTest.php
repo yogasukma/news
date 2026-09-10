@@ -1,0 +1,153 @@
+<?php
+
+use App\Models\Article;
+use App\Models\Feed;
+use App\Models\Folder;
+use Carbon\Carbon;
+
+describe('US-040: sources page', function () {
+    it('shows a separator and Sources link right after the date picker on the article page', function () {
+        $feed = Feed::factory()->create();
+        Article::factory()->today()->create(['feed_id' => $feed->id]);
+
+        $content = $this->get('/')->assertSuccessful()->getContent();
+
+        // Date picker, then separator, then Sources link (in document order)
+        $datePickerPos = strpos($content, 'data-spa-date');
+        $separatorPos = strpos($content, '>|</span>', $datePickerPos);
+        $sourcesPos = strpos($content, 'Sources', $separatorPos);
+
+        expect($datePickerPos)->not->toBe(false);
+        expect($separatorPos)->not->toBe(false);
+        expect($sourcesPos)->not->toBe(false);
+        expect($sourcesPos)->toBeGreaterThan($separatorPos);
+        expect($content)->toContain('href="'.route('sources').'"');
+    });
+
+    it('lists all feeds regardless of the selected date', function () {
+        $dateFeed = Feed::factory()->create(['title' => 'Today Feed']);
+        $otherFeed = Feed::factory()->create(['title' => 'Other Day Feed']);
+
+        Article::factory()->today()->create(['feed_id' => $dateFeed->id]);
+        Article::factory()->onDate('2026-05-01')->create(['feed_id' => $otherFeed->id]);
+
+        $this->get('/sources')
+            ->assertSuccessful()
+            ->assertSee('Today Feed')
+            ->assertSee('Other Day Feed');
+    });
+
+    it('shows favicon and feed name on the left and last fetched time on the right', function () {
+        $feed = Feed::factory()->create([
+            'title' => 'Example Blog',
+            'favicon_url' => 'https://example.com/favicon.ico',
+            'last_fetched_at' => now()->subHours(3),
+        ]);
+
+        $response = $this->get('/sources');
+
+        $response->assertSuccessful();
+        $content = $response->getContent();
+
+        // favicon + name left, time right (name appears before the time in document order)
+        $namePos = strpos($content, 'Example Blog');
+        $timePos = strpos($content, '3 hours ago');
+        $faviconPos = strpos($content, 'favicon.ico');
+
+        expect($namePos)->not->toBe(false);
+        expect($timePos)->not->toBe(false);
+        expect($faviconPos)->not->toBe(false);
+        expect($faviconPos)->toBeLessThan($namePos);
+        expect($namePos)->toBeLessThan($timePos);
+    });
+
+    it('sorts feeds by last fetched time descending (most recently fetched first)', function () {
+        $older = Feed::factory()->create([
+            'title' => 'Older Feed',
+            'last_fetched_at' => now()->subDays(2),
+        ]);
+        $newer = Feed::factory()->create([
+            'title' => 'Newer Feed',
+            'last_fetched_at' => now()->subHours(1),
+        ]);
+
+        $content = $this->get('/sources')->assertSuccessful()->getContent();
+
+        expect(strpos($content, 'Newer Feed'))->toBeLessThan(strpos($content, 'Older Feed'));
+    });
+
+    it('places feeds that have never been fetched at the bottom', function () {
+        $fetched = Feed::factory()->create([
+            'title' => 'Fetched Feed',
+            'last_fetched_at' => now()->subHours(1),
+        ]);
+        $never = Feed::factory()->create([
+            'title' => 'Never Feed',
+            'last_fetched_at' => null,
+        ]);
+        $older = Feed::factory()->create([
+            'title' => 'Older Feed',
+            'last_fetched_at' => now()->subDays(2),
+        ]);
+
+        $content = $this->get('/sources')->assertSuccessful()->getContent();
+
+        expect(strpos($content, 'Fetched Feed'))->toBeLessThan(strpos($content, 'Older Feed'));
+        expect(strpos($content, 'Older Feed'))->toBeLessThan(strpos($content, 'Never Feed'));
+    });
+
+    it('shows Never for feeds without fetch history', function () {
+        Feed::factory()->create(['last_fetched_at' => null]);
+
+        $this->get('/sources')
+            ->assertSuccessful()
+            ->assertSee('Never');
+    });
+
+    it('renders the same content via SPA fragment without a full page reload', function () {
+        $feed = Feed::factory()->create(['title' => 'Fragment Feed', 'last_fetched_at' => now()]);
+
+        $response = $this->get('/sources?fragment=1');
+
+        $response->assertSuccessful();
+        $response->assertSee('Fragment Feed');
+        $response->assertDontSee('<!DOCTYPE html>', false);
+        $response->assertDontSee('RSS Reader', false);
+    });
+
+    it('shows an empty state when there are no feeds', function () {
+        $this->get('/sources')
+            ->assertSuccessful()
+            ->assertSee('No sources yet.');
+    });
+
+    it('shows feed count in the header', function () {
+        Feed::factory()->count(3)->create();
+
+        $this->get('/sources')
+            ->assertSuccessful()
+            ->assertSee('3 sources');
+    });
+
+    it('includes the folder name next to the feed title when assigned', function () {
+        $folder = Folder::create(['name' => 'Tech', 'slug' => 'tech']);
+        $feed = Feed::factory()->inFolder($folder)->create(['title' => 'Tech Blog']);
+        Article::factory()->today()->create(['feed_id' => $feed->id]);
+
+        $this->get('/sources')
+            ->assertSuccessful()
+            ->assertSee('Tech Blog')
+            ->assertSee('Tech');
+    });
+});
+
+describe('US-040: relative fetch time formatting', function () {
+    it('renders diffForHumans for feeds with fetch history', function () {
+        $fetchedAt = Carbon::parse('2026-05-01 10:00:00');
+        $feed = Feed::factory()->create(['last_fetched_at' => $fetchedAt]);
+
+        $this->get('/sources')
+            ->assertSuccessful()
+            ->assertSee($fetchedAt->diffForHumans());
+    });
+});
