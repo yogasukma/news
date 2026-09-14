@@ -23,6 +23,15 @@ class FeedAddCommand extends Command
             return self::FAILURE;
         }
 
+        // Early duplicate check on the entered URL preserves the pre-discovery
+        // semantics: re-adding an existing (even temporarily broken) feed
+        // reports "already subscribed" without an unnecessary fetch.
+        if (Feed::where('url', $url)->exists()) {
+            $this->error('Already subscribed to this feed URL.');
+
+            return self::FAILURE;
+        }
+
         $this->info('Fetching feed...');
 
         try {

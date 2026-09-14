@@ -94,6 +94,18 @@ describe('FeedDiscovery', function () {
         expect($url)->toBe('https://example.com/rss');
     });
 
+    it('handles uppercase type attribute values case-insensitively', function () {
+        Http::fake([
+            'https://example.com*' => Http::response(htmlPageWithFeedLinks(
+                '<link rel="alternate" TYPE="APPLICATION/ATOM+XML" href="/atom.xml">'
+            )),
+        ]);
+
+        $url = app(FeedDiscovery::class)->discover('https://example.com');
+
+        expect($url)->toBe('https://example.com/atom.xml');
+    });
+
     it('ignores non-feed link types and throws when the page has no feed link', function () {
         Http::fake([
             'https://example.com*' => Http::response(htmlPageWithFeedLinks(
