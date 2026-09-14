@@ -33,6 +33,7 @@
   - PWA installs and works on both desktop and mobile browsers
   - CLI commands provide clear output and error handling
   - Zero duplicate articles in the stream, verified by URL/permalink regardless of source feed
+  - `rss:feed:add` accepts both direct feed URLs and website URLs (auto-discovers the site's real feed via HTML link tags)
   - Disabled feeds automatically recover after one month of inactivity without manual intervention
   - Visitors can see all sources and their last fetch times
 
@@ -42,6 +43,7 @@
 - **Description**: Manage RSS/Atom feed subscriptions entirely through Artisan CLI commands
 - **Key features**:
   - `rss:feed:add {url}` — Subscribe to a feed by URL (auto-detect RSS/Atom)
+  - **Feed URL auto-discovery** — `rss:feed:add` also accepts website URLs (e.g., `https://example.com`). When the URL returns an HTML page instead of a feed, scan the page source for `<link rel="alternate">` feed tags (`application/rss+xml` and `application/atom+xml`), prefer RSS over Atom when both exist, resolve relative `href`s against the website URL, and subscribe to the discovered feed (stored in `feed.url`) with the original website URL stored as `site_url`. If no feed link tag is found, fail with a clear error message and create nothing.
   - `rss:feed:remove {feed}` — Unsubscribe from a feed
   - `rss:feed:list` — List all subscribed feeds with details
   - `rss:feed:info {feed}` — Show feed details (title, URL, article count, last fetched)

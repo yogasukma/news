@@ -1,12 +1,12 @@
 # Product Backlog
 
 ## Summary
-- Total stories: 48
+- Total stories: 50
 - Delivered: 48 (Sprint 001: 12, Sprint 002: 9, Sprint 003: 4, Sprint 004: 3, Sprint 005: 4, Sprint 006: 2, Sprint 007: 2, Sprint 008: 1, Sprint 009: 2, Sprint 010: 4, Sprint 011: 5)
-- Remaining: 0
-- Total story points: 170
+- Remaining: 2 (Sprint 012 pending)
+- Total story points: 182
 - Delivered points: 170
-- Remaining points: 0
+- Remaining points: 12 (Module 1: Feed Management CLI)
 
 ---
 
@@ -616,3 +616,31 @@
   - [ ] Given a feed name link inside an article card, When clicked, Then the article modal does NOT open (guard prevents the card's modal handler)
   - [ ] Given an article modal, When it opens, Then the feed name in the modal header is a link to `/sources/{feed-id}`
   - [ ] Given the modal feed link, When clicked, Then the modal closes and navigation to the source page happens
+
+---
+
+## Module: Feed Auto-Discovery
+
+### US-049: Discover the real feed URL from a website's HTML
+- **As a** site owner, **I want** `rss:feed:add https://example.com` to find the site's real RSS/Atom feed automatically, **so that** I can subscribe with just the website address instead of hunting for the feed link.
+- **Priority**: P0
+- **Points**: 5
+- **Dependencies**: US-001
+- **Acceptance Criteria**:
+  - [ ] Given a website URL that returns an HTML page whose source contains `<link rel="alternate" type="application/rss+xml" href="...">`, When I run `rss:feed:add https://example.com`, Then the feed is created with `url` = the discovered RSS feed URL and `site_url` = `https://example.com`
+  - [ ] Given a website URL whose HTML contains AT LEAST ONE `<link rel="alternate" type="application/atom+xml">` (Atom) and NO RSS tag, When I run the command, Then the feed is created using the discovered Atom URL
+  - [ ] Given an HTML page with BOTH an RSS and an Atom feed link tag, When I run the command, Then the RSS feed URL is preferred
+  - [ ] Given an HTML page with a RELATIVE feed href (e.g., `/feed` or `/rss.xml`), When I run the command, Then the relative URL is resolved against the website origin into an absolute URL before subscribing
+  - [ ] Given a website URL whose HTML page contains NO `<link rel="alternate">` feed tags, When I run the command, Then the command fails with a clear error message ("no feed link found") and no feed is created
+  - [ ] Given a direct feed URL (existing behavior), When I run the command, Then discovery is skipped entirely and the feed is parsed as before
+
+### US-050: Discovery integration in rss:feed:add command flow
+- **As a** site owner, **I want** the auto-discovery to slot cleanly into the existing `rss:feed:add` validation and duplicate checks, **so that** adding a website URL behaves just like adding a direct feed URL.
+- **Priority**: P1
+- **Points**: 2
+- **Dependencies**: US-049
+- **Acceptance Criteria**:
+  - [ ] Given a website URL that is already subscribed (duplicate check on the RESOLVED feed URL), When I run the command, Then an "already subscribed" error is shown and no duplicate feed is created
+  - [ ] Given a website URL whose discovered feed fails to fetch or parse, When the command runs, Then the existing "Failed to fetch or parse feed" error is displayed and no feed is created
+  - [ ] Given an invalid or non-http(s) URL, When I run the command, Then the existing "Invalid URL" error is shown before any discovery attempt
+  - [ ] Given a successful discovery, When the command completes, Then the output confirms the discovered feed title and URL so the owner sees which feed was actually subscribed
