@@ -111,6 +111,24 @@ describe('US-001: Subscribe to a feed by URL', function () {
     it('AC4: shows already subscribed for duplicate URL', function () {
         Feed::factory()->create(['url' => 'https://example.com/feed.xml']);
 
+        Http::fake([
+            'example.com/*' => Http::response(<<<'XML'
+                <?xml version="1.0" encoding="UTF-8"?>
+                <rss version="2.0">
+                    <channel>
+                        <title>Test Blog</title>
+                        <link>https://example.com</link>
+                        <item>
+                            <title>Post</title>
+                            <link>https://example.com/post</link>
+                            <guid>post-1</guid>
+                            <pubDate>Mon, 04 May 2026 10:00:00 +0000</pubDate>
+                        </item>
+                    </channel>
+                </rss>
+                XML),
+        ]);
+
         $this->artisan('rss:feed:add', ['url' => 'https://example.com/feed.xml'])
             ->assertFailed()
             ->expectsOutputToContain('Already subscribed');
