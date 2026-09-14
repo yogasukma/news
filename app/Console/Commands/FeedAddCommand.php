@@ -3,16 +3,17 @@
 namespace App\Console\Commands;
 
 use App\Models\Feed;
+use App\Services\FeedDiscovery;
 use App\Services\FeedParser;
 use Illuminate\Console\Command;
 
 class FeedAddCommand extends Command
 {
-    protected $signature = 'rss:feed:add {url : The RSS/Atom feed URL}';
+    protected $signature = 'rss:feed:add {url : The RSS/Atom feed URL or website URL}';
 
-    protected $description = 'Subscribe to a new RSS/Atom feed';
+    protected $description = 'Subscribe to a new RSS/Atom feed (auto-discovers feeds from website URLs)';
 
-    public function handle(FeedParser $parser): int
+    public function handle(FeedParser $parser, FeedDiscovery $discovery): int
     {
         $url = $this->argument('url');
 
@@ -22,6 +23,9 @@ class FeedAddCommand extends Command
             return self::FAILURE;
         }
 
+        // Early duplicate check on the entered URL preserves the pre-discovery
+        // semantics: re-adding an existing (even temporarily broken) feed
+        // reports "already subscribed" without an unnecessary fetch.
         if (Feed::where('url', $url)->exists()) {
             $this->error('Already subscribed to this feed URL.');
 
@@ -31,9 +35,29 @@ class FeedAddCommand extends Command
         $this->info('Fetching feed...');
 
         try {
+            // Direct feed URL: existing behavior, FeedParser validation is the gate.
             $result = $parser->parse($url);
-        } catch (\Exception $e) {
-            $this->error("Failed to fetch or parse feed: {$e->getMessage()}");
+            $feedUrl = $url;
+            $siteUrl = $result['feed']['site_url'];
+            $discovered = false;
+        } catch (\Exception $parseException) {
+            // Not a feed (e.g., an HTML website page): discover the real feed link.
+            $this->info('No feed at the URL; scanning page for RSS/Atom links...');
+
+            try {
+                $feedUrl = $discovery->discover($url);
+                $result = $parser->parse($feedUrl);
+                $siteUrl = $url;
+                $discovered = true;
+            } catch (\Exception $discoveryException) {
+                $this->error('Failed to fetch or parse feed: '.$parseException->getMessage().' '.$discoveryException->getMessage());
+
+                return self::FAILURE;
+            }
+        }
+
+        if (Feed::where('url', $feedUrl)->exists()) {
+            $this->error('Already subscribed to this feed URL.');
 
             return self::FAILURE;
         }
@@ -43,10 +67,14 @@ class FeedAddCommand extends Command
 
         $feed = Feed::create([
             'title' => $feedData['title'],
-            'url' => $url,
-            'site_url' => $feedData['site_url'],
+            'url' => $feedUrl,
+            'site_url' => $siteUrl,
             'description' => $feedData['description'],
         ]);
+
+        if ($discovered) {
+            $this->info("Discovered feed '{$feed->title}' at {$feedUrl}.");
+        }
 
         $this->info("Subscribed to '{$feed->title}' (ID: {$feed->id}).");
         $this->info("Found {$articleCount} article(s) in feed.");
