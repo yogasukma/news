@@ -6,6 +6,7 @@
     <meta name="theme-color" content="#1c1917">
     <link rel="manifest" href="/manifest.json">
     <link rel="apple-touch-icon" href="/icons/icon-192.png">
+    <link rel="alternate" type="application/rss+xml" title="{{ config('app.name', 'Feeds') }} RSS Feed" href="{{ url('/rss') }}">
 
     <title>{{ $title ?? 'Feeds' }}</title>
 

@@ -14,3 +14,4 @@
 | 010 | sources-and-modal-ux | Completed | 2026-09-10 | 2026-09-10 | 4 | 9 |
 | 011 | source-detail-page | Completed | 2026-09-10 | 2026-09-14 | 5 | 14 |
 | 012 | feed-discovery | Completed | 2026-09-14 | 2026-09-14 | 2 | 7 |
+| 013 | self-rss-feed | Completed | 2026-10-25 | 2026-10-25 | 2 | 7 |

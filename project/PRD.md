@@ -1,3 +1,9 @@
+---
+subject: RSS reader product needs
+created_at: 2026-10-25
+updated_at: 2026-10-25
+creator: scrum / Phase 1 — Discovery
+---
 # Product Requirements Document: RSS Reader
 
 ## 1. Overview
@@ -26,6 +32,7 @@
   - Simple CLI-based feed management for the owner
   - Accessible from mobile and desktop via PWA
   - A clean, duplication-free article stream and a healthy feed ecosystem (broken feeds recover automatically)
+  - A public RSS feed of the aggregated articles for external subscribers
 - **Success metrics**:
   - Successfully subscribes to and fetches articles from RSS/Atom feeds
   - Article content renders cleanly and readably for public visitors
@@ -36,6 +43,7 @@
   - `rss:feed:add` accepts both direct feed URLs and website URLs (auto-discovers the site's real feed via HTML link tags)
   - Disabled feeds automatically recover after one month of inactivity without manual intervention
   - Visitors can see all sources and their last fetch times
+  - Public `/rss` serves the newest stored articles as valid RSS 2.0, 100 per page via `?page`
 
 ## 4. Feature Modules
 
@@ -203,6 +211,17 @@
   - SPA-compatible: supports `?fragment=1` content swapping like all other pages
   - Sources without a valid site URL show the favicon + title header without the clickable external link
   - **Source names link to their detail page everywhere**: article cards (homepage, date pages, search results, source detail list) and the article modal header link to `/sources/{feed}`
+- **Priority**: Must-have
+
+### Module 16: Self RSS Feed
+- **Description**: Expose the articles stored in this application as a public RSS feed so external readers can subscribe to the aggregator itself
+- **Key features**:
+  - Public route `/rss` serving a valid RSS 2.0 feed with no login
+  - Lists stored articles ordered newest first across all feeds
+  - Paginates with 100 articles per page via the `?page` query parameter (page 1 is the default)
+  - Each item shows title, link to the original article URL, publication date, source feed name, and the full stored article content
+  - Feed channel identifies this site with its name, homepage link, and a short description
+  - Article pages advertise the feed with a discovery link so readers find `/rss` automatically
 - **Priority**: Must-have
 
 ## 5. Non-Functional Requirements
