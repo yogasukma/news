@@ -1,11 +1,17 @@
+---
+subject: RSS reader story backlog
+created_at: 2026-10-25
+updated_at: 2026-10-25
+creator: scrum / Phase 2 — Backlog
+---
 # Product Backlog
 
 ## Summary
-- Total stories: 50
-- Delivered: 50 (Sprint 001: 12, Sprint 002: 9, Sprint 003: 4, Sprint 004: 3, Sprint 005: 4, Sprint 006: 2, Sprint 007: 2, Sprint 008: 1, Sprint 009: 2, Sprint 010: 4, Sprint 011: 5, Sprint 012: 2)
+- Total stories: 52
+- Delivered: 52 (Sprint 001: 12, Sprint 002: 9, Sprint 003: 4, Sprint 004: 3, Sprint 005: 4, Sprint 006: 2, Sprint 007: 2, Sprint 008: 1, Sprint 009: 2, Sprint 010: 4, Sprint 011: 5, Sprint 012: 2, Sprint 013: 2)
 - Remaining: 0
-- Total story points: 182
-- Delivered points: 182
+- Total story points: 189
+- Delivered points: 189
 - Remaining points: 0
 
 ---
@@ -646,3 +652,35 @@
   - [ ] Given a website URL whose discovered feed fails to fetch or parse, When the command runs, Then the existing "Failed to fetch or parse feed" error is displayed and no feed is created
   - [ ] Given an invalid or non-http(s) URL, When I run the command, Then the existing "Invalid URL" error is shown before any discovery attempt
   - [ ] Given a successful discovery, When the command completes, Then the output confirms the discovered feed title and URL so the owner sees which feed was actually subscribed
+
+---
+
+## Module: Self RSS Feed
+
+### US-051: [DELIVERED] Public self RSS feed with pagination
+- **As a** public visitor, **I want** to subscribe to `/rss` and read the latest stored articles in my own RSS reader, **so that** I can follow this aggregator externally.
+- **Priority**: P0
+- **Points**: 5
+- **Dependencies**: US-009
+- **Status**: Delivered in Sprint 013
+- **Acceptance Criteria**:
+  - [ ] Given stored articles, When I visit `/rss`, Then a valid RSS 2.0 feed is returned with no login and an XML content type
+  - [ ] Given stored articles, When the feed renders, Then articles are ordered newest first and the channel shows the site name, homepage link, and description
+  - [ ] Given more than 100 stored articles, When I visit `/rss`, Then only the 100 newest articles are shown on page 1
+  - [ ] Given more than 100 stored articles, When I visit `/rss?page=2`, Then the next 100 articles are shown
+  - [ ] Given an article in the feed, When rendered, Then the item shows title, link to the original URL, publication date, source feed name, and full stored content
+
+### US-052: [DELIVERED] Advertise self RSS feed for auto-discovery
+- **As a** public visitor, **I want** article pages to advertise the self feed, **so that** my browser and reader find `/rss` automatically.
+- **Priority**: P2
+- **Points**: 2
+- **Dependencies**: US-051
+- **Status**: Delivered in Sprint 013
+- **Acceptance Criteria**:
+  - [ ] Given an article page, When the HTML head renders, Then a feed discovery link for `/rss` with type `application/rss+xml` is present
+  - [ ] Given the discovery link, When followed, Then it opens the `/rss` feed
+
+---
+
+## Deferred
+- None. Both US-051 and US-052 fit in the next sprint.
